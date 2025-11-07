@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { fetchFromTmdb, ENDPOINTS } from '../api/tmdb'; 
 import MovieCard from '../components/MovieCard'; 
+import './HomeStyle.css';
 
 // Mappa fittizia dei generi (dovrebbe essere caricata da API in un progetto completo)
 const DUMMY_GENRES = {
@@ -20,10 +21,8 @@ export default function Home() {
         const loadMovies = async () => {
             try {
                 const data = await fetchFromTmdb(ENDPOINTS.popularMovies);
-                
-                // 💡 Correzione: Il problema era qui. Se l'API fallisce, data.results è undefined.
-                // Usando 'data.results || []', se 'data' è un oggetto con 'results: []' (il nostro ritorno di errore), 
-                // o se 'data' è undefined, gestiamo il caso. Il codice API ora restituisce { results: [] } in caso di errore.
+               
+
                 setPopularMovies(data.results || []); 
             } catch (error) {
                 console.error("Impossibile caricare i film, verifica la console per l'errore TMDB/rete.", error);
@@ -39,7 +38,7 @@ export default function Home() {
         return <Container className="text-white pt-5" style={{ minHeight: '100vh', padding: '100px 0' }}>Caricamento film... 🍿</Container>;
     }
 
-    // Se l'array è vuoto, mostriamo un messaggio di errore (es. Chiave API errata)
+    // Se l'array è vuoto,  messaggio di errore 
     if (popularMovies.length === 0) {
          return (
             <Container className="text-danger pt-5" style={{ minHeight: '100vh', padding: '100px 0' }}>
@@ -51,7 +50,7 @@ export default function Home() {
     
     return (
         <Container fluid className="pt-5" style={{ backgroundColor: '#141414', minHeight: '100vh' }}>
-            <h2 className="text-white mb-4 pt-4 ps-3">Film Popolari</h2>
+            <h2 className=" main-title">Film Popolari</h2>
             
             <Row xs={2} sm={3} md={4} lg={6} className="g-4 px-3">
                 {popularMovies.map(movie => (
