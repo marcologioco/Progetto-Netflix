@@ -13,13 +13,11 @@
 /* Stile per l'immagine */
 .card-poster {
     width: 100%;
-    height: 100%; /* Copre l'altezza del contenitore */
-    object-fit: cover; /* Assicura che l'immagine copra lo spazio senza distorcersi */
+    height: 100%; 
+    object-fit: cover; 
 }
 
-/* ---------------------------------------------------- */
-/* Effetto Gradiente (la chiave per la sfumatura) */
-/* ---------------------------------------------------- */
+
 .image-gradient-overlay {
     position: absolute;
     top: 0;
@@ -29,39 +27,37 @@
     /* Questo crea la sfumatura: da trasparente in alto, a nero in basso */
     background: linear-gradient(
         to bottom,
-        rgba(0, 0, 0, 0) 40%, /* Inizia trasparente al 40% dell'altezza */
+        rgba(0, 0, 0, 0) 40%, 
         rgba(0, 0, 0, 0.6) 70%,
-        rgba(0, 0, 0, 1) 100% /* Diventa completamente nero in fondo */
+        rgba(0, 0, 0, 1) 100% 
     );
-    z-index: 2; /* Sovrapposto all'immagine */
+    z-index: 2; 
 }
 
-/* ---------------------------------------------------- */
-/* Stili per il Testo */
-/* ---------------------------------------------------- */
+
 .card-text-overlay {
     position: absolute;
-    bottom: 0; /* Posiziona il testo in basso */
+    bottom: 0; 
     width: 100%;
     padding: 10px;
-    color: white; /* Testo bianco */
-    z-index: 3; /* Sovrapposto anche al gradiente */
+    color: white; 
+    z-index: 3; 
 }
 
 .movie-title-card {
-    font-size: 1rem; /* Titolo leggermente più piccolo e ben visibile */
+    font-size: 1rem; 
     margin-bottom: 3px;
     font-weight: bold;
 }
 
 .movie-genres-card {
-    font-size: 0.7rem; /* Generi più piccoli */
+    font-size: 0.7rem; 
     margin: 0;
-    color: #ccc; /* Un grigio chiaro per distinguersi */
+    color: #ccc; 
 }
 
-/* Effetto Hover Opzionale (opzionale, ma consigliato per un'esperienza Netflix) */
+
 .movie-card-custom:hover {
-    transform: scale(1.05); /* Ingrandisce leggermente la card al passaggio del mouse */
+    transform: scale(1.05); 
     z-index: 10;
 }
