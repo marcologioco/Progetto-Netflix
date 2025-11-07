@@ -1,12 +1,21 @@
-import React from 'react';import { Outlet } from 'react-router-dom';import Navbar from './components/Navbar.jsx';
-import Footer from './components/Footer.jsx';
-export default function App(){
-    return(
-    <><Navbar/>
-    <Outlet/>
-    <Footer/>
-    </>
-    ) 
+// src/App.jsx
 
+import React from 'react';
+import { Outlet } from 'react-router-dom';
+import NavBar from './components/Navbar.jsx'; 
+import Footer from './components/Footer.jsx'; 
+import 'bootstrap/dist/css/bootstrap.min.css'; 
 
+export default function App() {
+    return (
+        <>
+            <NavBar /> 
+            
+            <main style={{ minHeight: '100vh', backgroundColor: '#141414' }}>
+                <Outlet />
+            </main>
+            
+            <Footer />
+        </>
+    );
 }

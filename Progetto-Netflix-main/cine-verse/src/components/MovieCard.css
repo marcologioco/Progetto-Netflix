@@ -1,0 +1,67 @@
+/* Stili principali del contenitore della Card */
+.movie-card-custom {
+    width: 12rem; 
+    min-height: 18rem; 
+    border: none;
+    overflow: hidden; 
+    position: relative; 
+    background-color: #555555; /* Colore di sfondo della card */
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out; 
+}
+
+/* Stile per l'immagine */
+.card-poster {
+    width: 100%;
+    height: 100%; /* Copre l'altezza del contenitore */
+    object-fit: cover; /* Assicura che l'immagine copra lo spazio senza distorcersi */
+}
+
+/* ---------------------------------------------------- */
+/* Effetto Gradiente (la chiave per la sfumatura) */
+/* ---------------------------------------------------- */
+.image-gradient-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* Questo crea la sfumatura: da trasparente in alto, a nero in basso */
+    background: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0) 40%, /* Inizia trasparente al 40% dell'altezza */
+        rgba(0, 0, 0, 0.6) 70%,
+        rgba(0, 0, 0, 1) 100% /* Diventa completamente nero in fondo */
+    );
+    z-index: 2; /* Sovrapposto all'immagine */
+}
+
+/* ---------------------------------------------------- */
+/* Stili per il Testo */
+/* ---------------------------------------------------- */
+.card-text-overlay {
+    position: absolute;
+    bottom: 0; /* Posiziona il testo in basso */
+    width: 100%;
+    padding: 10px;
+    color: white; /* Testo bianco */
+    z-index: 3; /* Sovrapposto anche al gradiente */
+}
+
+.movie-title-card {
+    font-size: 1rem; /* Titolo leggermente più piccolo e ben visibile */
+    margin-bottom: 3px;
+    font-weight: bold;
+}
+
+.movie-genres-card {
+    font-size: 0.7rem; /* Generi più piccoli */
+    margin: 0;
+    color: #ccc; /* Un grigio chiaro per distinguersi */
+}
+
+/* Effetto Hover Opzionale (opzionale, ma consigliato per un'esperienza Netflix) */
+.movie-card-custom:hover {
+    transform: scale(1.05); /* Ingrandisce leggermente la card al passaggio del mouse */
+    z-index: 10;
+}
