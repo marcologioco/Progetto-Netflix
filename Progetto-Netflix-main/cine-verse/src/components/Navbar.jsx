@@ -1,65 +1,110 @@
-// src/components/Navbar.jsx (o come lo hai chiamato)
+// src/components/Navbar.jsx
 
 import React from 'react';
-import { Link, NavLink } from 'react-router-dom'; // Importiamo Link/NavLink per il routing
-import { Navbar, Container, Nav } from 'react-bootstrap'; 
-import { Search, HeartFill } from 'react-bootstrap-icons'; // Useremo questa libreria per le icone
+// Usiamo solo Link e NavLink di react-router-dom
+import { Link, NavLink } from 'react-router-dom'; 
+import { Search, HeartFill } from 'react-bootstrap-icons'; // Le icone restano utili
+import './Navbar.css';
 
-// Assicurati di aver installato react-bootstrap-icons se non l'hai fatto:
-// npm install react-bootstrap-icons
+
+
+import logoImage from '../assets/logo.png'; 
 
 export default function NavBar() {
-    
-    // Contatore fittizio per i preferiti (sarà dinamico in seguito)
-    const favoriteCount = 5; 
+    
+    const favoriteCount = 5; 
 
-    return (
-        <Navbar bg='dark' data-bs-theme='dark' fixed='top' expand="lg">
-            <Container fluid>
-                
-                {/* 1. Logo/Brand: Link a Home */}
-                <Navbar.Brand as={Link} to="/" style={{ color: '#E50914', fontWeight: 'bold' }}>
-                    CineeVerse
-                </Navbar.Brand>
-                
-                <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                
-                <Navbar.Collapse id="basic-navbar-nav">
-                    
-                    {/* 2. Link di Navigazione principali (sinistra) */}
-                    <Nav className="me-auto">
-                        {/* Usiamo NavLink per avere la classe 'active' automatica */}
-                        <Nav.Link as={NavLink} to="/" end>Home</Nav.Link>
-                        {/* FILM e SERIE TV possono puntare alla Home per ora, 
-                            o ad endpoint specifici in futuro */}
-                        <Nav.Link as={NavLink} to="/movies">Film</Nav.Link>
-                        <Nav.Link as={NavLink} to="/tvshows">Serie TV</Nav.Link>
-                    </Nav>
+    return (
+       
+        <nav className='navbar navbar-expand-lg  bg-navbar fixed-top'>
+            
+            <div className='container-fluid'>
+                
+                {/* 2. Logo/Brand: Link a Home */}
+                {/* 'navbar-brand' è la classe Bootstrap per il logo/brand */}
+                <Link to="/" className='navbar-brand d-flex align-items-center'>
+                    <img
+                        src={logoImage} 
+                        height="50" // Puoi aumentare l'altezza qui
+                        alt="CineeVerse Logo"
+                        className='d-inline-block align-top'
+                    />
+                </Link>
+                
+                {/* 3. Toggler per Mobile */}
+                <button 
+                    className="navbar-toggler" 
+                    type="button" 
+                    data-bs-toggle="collapse" 
+                    data-bs-target="#navbarNav" 
+                    aria-controls="navbarNav" 
+                    aria-expanded="false" 
+                    aria-label="Toggle navigation"
+                >
+                    <span className="navbar-toggler-icon"></span>
+                </button>
+                
+                {/* 4. Contenuto della Navbar (Collassabile) */}
+                <div className="collapse navbar-collapse" id="navbarNav">
+                    
+                    {/* Navigazione principale (Sinistra) */}
+                    {/* 'navbar-nav' per la lista di link; 'me-auto' per spingerla a sinistra */}
+                    <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+                        
+                        {/* Ogni elemento della lista ha la classe 'nav-item' */}
+                        <li className="nav-item">
+                            {/* Usiamo NavLink. Il contenuto ha la classe 'nav-link' */}
+                            <NavLink 
+                                to="/" 
+                                end
+                                className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
+                                aria-current="page"
+                            >Home</NavLink>
+                        </li>
+                        <li className="nav-item">
+                            <NavLink 
+                                to="/movies" 
+                                className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
+                            >Film</NavLink>
+                        </li>
+                        <li className="nav-item">
+                            <NavLink 
+                                to="/tvshows" 
+                                className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
+                            >Serie TV</NavLink>
+                        </li>
+                    </ul>
 
-                    {/* 3. Link di servizio (destra) */}
-                    <Nav className="ms-auto d-flex align-items-center">
-                        
-                        {/* Link Ricerca (icona) */}
-                        <Nav.Link as={NavLink} to="/search" className="me-3">
-                            <Search size={20} />
-                        </Nav.Link>
+                   
+                    <ul className="navbar-nav ms-auto d-flex align-items-center">
+                        
+                        {/* Link Ricerca (icona) */}
+                        <li className="nav-item me-3">
+                            <NavLink 
+                                to="/search" 
+                                className="nav-link"
+                            >
+                                <Search size={20} />
+                            </NavLink>
+                        </li>
 
-                        {/* Link Preferiti (icona + contatore) */}
-                        <Nav.Link 
-                            as={NavLink} 
-                            to="/favorites" 
-                            className="d-flex align-items-center"
-                        >
-                            <HeartFill size={20} color="#E50914" />
-                            {/* Visualizzazione del conteggio (stile badge) */}
-                            <span className="ms-1 badge bg-danger rounded-pill">
-                                {favoriteCount}
-                            </span>
-                        </Nav.Link>
-                    </Nav>
-                    
-                </Navbar.Collapse>
-            </Container>
-        </Navbar>
-    );
+                        {/* Link Preferiti (icona + contatore) */}
+                        <li className="nav-item">
+                            <NavLink 
+                                to="/favorites" 
+                                className="nav-link d-flex align-items-center"
+                            >
+                                <HeartFill size={20} color="#E50914" />
+                                {/* Visualizzazione del conteggio (stile badge) */}
+                                <span className="ms-1 badge bg-danger rounded-pill">
+                                    {favoriteCount}
+                                </span>
+                            </NavLink>
+                        </li>
+                    </ul>
+                </div>
+                
+            </div>
+        </nav>
+    );
 }

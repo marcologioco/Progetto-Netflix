@@ -1,0 +1,4 @@
+.bg-navbar{
+    background-image: linear-gradient(to right, #b90000 0%, #610000 30%, #300101 70%, #000000 100%);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
