@@ -1,39 +1,39 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { FavoritesContext } from '../context/FavoritesContext';
+import { DUMMY_GENRES } from '../utils/genres';
+import FavoriteButton from './FavoriteButton'; // import nuovo componente
 import './MovieCard.css';
 
-export default function MovieCard({ title, poster, genres, vote, onAddFavorite }) {
+export default function MovieCard({ movie }) {
+    if (!movie) return null;
+
+    const { favorites, addFavorite, removeFavorite } = useContext(FavoritesContext);
+    const isFavorite = favorites.some(f => f.id === movie.id);
     const POSTER_BASE_URL = "https://image.tmdb.org/t/p/w500";
 
     return (
         <div className="movie-card-custom">
             <div className="card-content-wrapper">
-                {/* Poster */}
                 <img
-                    src={`${POSTER_BASE_URL}${poster}`}
-                    alt={title}
+                    src={`${POSTER_BASE_URL}${movie.poster_path}`}
+                    alt={movie.title}
                     className="card-poster"
                 />
 
-                {/* Gradiente */}
                 <div className="image-gradient-overlay"></div>
 
-                {/* Testo */}
                 <div className="card-text-overlay">
-                    <h5 className="movie-title-card">{title}</h5>
+                    <h5 className="movie-title-card">{movie.title}</h5>
                     <p className="movie-genres-card">
-                        {genres ? genres.join(", ") : "Genere sconosciuto"}
+                        {movie.genre_ids?.map(id => DUMMY_GENRES[id] || 'Sconosciuto').join(', ')}
                     </p>
-                    <p className="movie-rating-card">⭐ {vote?.toFixed(1)}</p>
-                </div>
+                    <p className="movie-rating-card">⭐ {movie.vote_average?.toFixed(1)}</p>
 
-                {/* Overlay hover con pulsante preferiti */}
-                <div className="card-hover-overlay">
-                    <button
-                        className="btn btn-sm btn-outline-light"
-                        onClick={onAddFavorite}
-                    >
-                        + Preferiti
-                    </button>
+                    {/* Nuovo cuoricino animato */}
+                    <FavoriteButton
+                        isFavorite={isFavorite}
+                        onClick={() => isFavorite ? removeFavorite(movie.id) : addFavorite(movie)}
+                    />
                 </div>
             </div>
         </div>

@@ -12,3 +12,107 @@
     font-weight: 700;
     margin-bottom: 15px;
 }
+
+.hero-container {
+    position: relative;
+    width: 100%;
+    height: 70vh; /* Hero più alta */
+    background-size: cover;
+    background-position: center center;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.hero-gradient {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.7) 60%, rgba(0,0,0,0.95) 100%);
+    display: flex;
+    align-items: center;       /* centra verticalmente l'intero blocco */
+    justify-content: flex-start; /* allinea a sinistra */
+    padding: 2rem;
+    text-align: left;
+}
+
+.hero-content {
+    color: white;
+    max-width: 500px;          /* blocco più stretto */
+    display: flex;
+    flex-direction: column;    /* elementi uno sotto l'altro */
+    gap: 0.5rem;               /* spazio tra titolo, testo, bottone */
+}
+
+.hero-centered {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+.hero-title {
+    font-family: 'Oswald', sans-serif; /* font particolare */
+    font-size: 7rem; 
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.hero-overview {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    max-height: 8em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.hero-rating {
+    font-size: 1.2rem;
+    color: gold;
+    margin-bottom: 1rem;
+}
+
+.hero-btn {
+    font-weight: bold;
+    font-size: 1rem;
+    padding: 0.5rem 1.5rem;
+}
+
+.hero-btn-rating {
+    display: flex;
+    align-items: center;
+    gap: 1rem;                 
+}
+
+
+.hero-logo-wrapper {
+    width: 45px;              
+    height: 45px;
+    border-radius: 50%;       
+    background-color: #ffffff ;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+}
+
+.hero-logo-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;             
+    
+}
+
+.hero-logo {
+    height: 50px;             
+    object-fit: contain;
+}
+
+.hero-logo-text {
+    font-size: 0.8rem;
+    color: #ffffff;
+    padding-top: .5rem;
+    font-style:italic;
+}
