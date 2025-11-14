@@ -1,0 +1,50 @@
+/* src/components/FavoriteButton.css */
+.favorite-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease;
+    color: white; /* colore iniziale */
+    position: relative;
+}
+
+/* Cuore rosso quando aggiunto */
+.favorite-active {
+    color: #E50914;
+}
+
+/* Animazione click tipo “pop” */
+.favorite-clicked {
+    animation: pop-heart 0.3s forwards;
+}
+
+@keyframes pop-heart {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.4); }
+    100% { transform: scale(1); }
+}
+
+/* Optional: piccolo effetto spark */
+.favorite-btn::after {
+    content: '';
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: gold;
+    border-radius: 50%;
+    opacity: 0;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%) translateY(-10px);
+    pointer-events: none;
+    animation: spark 0.5s ease-out forwards;
+}
+
+@keyframes spark {
+    0% { opacity: 1; transform: translateX(-50%) translateY(0) scale(0.5); }
+    100% { opacity: 0; transform: translateX(-50%) translateY(-20px) scale(1); }
+}

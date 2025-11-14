@@ -1,70 +1,122 @@
-// src/pages/Home.jsx
+import React, { useState, useEffect, useContext } from 'react';
+import { fetchFromTmdb, ENDPOINTS } from '../api/tmdb';
+import MovieCard from '../components/MovieCard';
+import { FavoritesContext } from '../context/FavoritesContext';
+import './HomeStyle.css';
+import logoImage from '../assets/logo.png';
 
-import React, { useState, useEffect } from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
-import { fetchFromTmdb, ENDPOINTS } from '../api/tmdb'; 
-import MovieCard from '../components/MovieCard'; 
-
-// Mappa fittizia dei generi (dovrebbe essere caricata da API in un progetto completo)
 const DUMMY_GENRES = {
-    28: 'Azione', 12: 'Avventura', 35: 'Commedia', 80: 'Crimine', 18: 'Drammatico', 
-    53: 'Thriller', 10749: 'Romance', 14: 'Fantasy', 878: 'Fantascienza', 10752: 'Guerra'
+    28: 'Azione', 12: 'Avventura', 35: 'Commedia', 80: 'Crimine',
+    18: 'Drammatico', 53: 'Thriller', 10749: 'Romance', 14: 'Fantasy',
+    878: 'Fantascienza', 10752: 'Guerra'
 };
-
 
 export default function Home() {
     const [popularMovies, setPopularMovies] = useState([]);
-    const [loading, setLoading] = useState(true);
-    
+    const [topRatedMovies, setTopRatedMovies] = useState([]);
+    const [trendingMovies, setTrendingMovies] = useState([]);
+    const [heroMovie, setHeroMovie] = useState(null);
+
+    const { favorites, addFavorite, removeFavorite } = useContext(FavoritesContext);
+
     useEffect(() => {
-        const loadMovies = async () => {
-            try {
-                const data = await fetchFromTmdb(ENDPOINTS.popularMovies);
-                
-                // 💡 Correzione: Il problema era qui. Se l'API fallisce, data.results è undefined.
-                // Usando 'data.results || []', se 'data' è un oggetto con 'results: []' (il nostro ritorno di errore), 
-                // o se 'data' è undefined, gestiamo il caso. Il codice API ora restituisce { results: [] } in caso di errore.
-                setPopularMovies(data.results || []); 
-            } catch (error) {
-                console.error("Impossibile caricare i film, verifica la console per l'errore TMDB/rete.", error);
-            } finally {
-                setLoading(false);
-            }
+        const loadAll = async () => {
+            const pop = await fetchFromTmdb(ENDPOINTS.popularMovies);
+            const top = await fetchFromTmdb(ENDPOINTS.topRated);
+            const trend = await fetchFromTmdb(ENDPOINTS.trending);
+
+            setPopularMovies(pop.results || []);
+            setTopRatedMovies(top.results || []);
+            setTrendingMovies(trend.results || []);
+
+            // Hero: prendiamo il primo film popolare
+            if (pop.results?.length) setHeroMovie(pop.results[0]);
         };
 
-        loadMovies();
-    }, []); 
+        loadAll();
+    }, []);
 
-    if (loading) {
-        return <Container className="text-white pt-5" style={{ minHeight: '100vh', padding: '100px 0' }}>Caricamento film... 🍿</Container>;
-    }
+    const handleFavoriteHero = () => {
+        if (!heroMovie) return;
+        if (favorites.some(f => f.id === heroMovie.id)) removeFavorite(heroMovie.id);
+        else addFavorite(heroMovie);
+    };
 
-    // Se l'array è vuoto, mostriamo un messaggio di errore (es. Chiave API errata)
-    if (popularMovies.length === 0) {
-         return (
-            <Container className="text-danger pt-5" style={{ minHeight: '100vh', padding: '100px 0' }}>
-                <h3 className='text-center'>⚠️ Errore di Caricamento Dati ⚠️</h3>
-                <p className='text-center'>I film non sono stati caricati. Controlla la console del browser e verifica che la tua Chiave API TMDB in `src/api/tmdb.js` sia corretta e attiva (errore 401).</p>
-            </Container>
-        );
-    }
-    
     return (
-        <Container fluid className="pt-5" style={{ backgroundColor: '#141414', minHeight: '100vh' }}>
-            <h2 className="text-white mb-4 pt-4 ps-3">Film Popolari</h2>
-            
-            <Row xs={2} sm={3} md={4} lg={6} className="g-4 px-3">
-                {popularMovies.map(movie => (
-                    <Col key={movie.id} className="d-flex justify-content-center">
-                        <MovieCard 
-                            title={movie.title} 
-                            poster={movie.poster_path} 
-                            // Trasformiamo gli ID in nomi
-                            genres={movie.genre_ids.map(id => DUMMY_GENRES[id] || 'Sconosciuto')}
-                        />
-                    </Col>
+        <div className="container-fluid pt-4" style={{ backgroundColor: "#141414", minHeight: "100vh" }}>
+            {/* HERO */}
+            {heroMovie && (
+                <div className="hero-container mb-5"
+                    style={{ backgroundImage: `url(https://image.tmdb.org/t/p/original${heroMovie.backdrop_path})` }}>
+                    <div className="hero-gradient">
+                        <div className="hero-content">
+                            {/* Logo con cerchio + scritta accanto */}
+                            <div className="hero-logo-row">
+                                <div className="hero-logo-wrapper">
+                                    <img
+                                        src={logoImage}
+                                        alt="CineeVerse Logo"
+                                        className="hero-logo"
+                                    />
+                                </div>
+                                <span className="hero-logo-text">CineVerse</span>
+                            </div>
+
+                            {/* Titolo e testo */}
+                            <h1 className="hero-title">{heroMovie.title}</h1>
+                            <p className="hero-overview">{heroMovie.overview}</p>
+
+                            {/* Bottone e stelline */}
+                            <div className="hero-btn-rating">
+                                <FavoriteButton
+                                    isFavorite={favorites.some(f => f.id === heroMovie.id)}
+                                    onClick={handleFavoriteHero}
+                                />
+                                <p className="hero-rating">⭐ {heroMovie.vote_average?.toFixed(1)}</p>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+
+
+            )}
+
+            {/* ===================== POPOLARI ===================== */}
+            <Section
+                title="🎬 Film Popolari"
+                movies={popularMovies}
+            />
+
+            {/* ===================== TOP RATED ===================== */}
+            <Section
+                title="⭐ Più Votati"
+                movies={topRatedMovies}
+            />
+
+            {/* ===================== TRENDING ===================== */}
+            <Section
+                title="🔥 In Tendenza"
+                movies={trendingMovies}
+            />
+        </div>
+    );
+}
+
+function Section({ title, movies }) {
+    const displayed = movies.slice(0, 6);
+
+    return (
+        <div className="mb-5 px-3">
+            <h2 className="text-white mb-3">{title}</h2>
+            <div className="row g-3">
+                {displayed.map(movie => (
+                    <div key={movie.id} className="col-6 col-sm-4 col-md-3 col-lg-2">
+                        <MovieCard movie={movie} />
+                    </div>
                 ))}
-            </Row>
-        </Container>
+            </div>
+        </div>
     );
 }

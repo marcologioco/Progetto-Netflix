@@ -1,37 +1,41 @@
-import React from 'react';
-import { Card } from 'react-bootstrap';
-import './MovieCard.css'; 
+import React, { useContext } from 'react';
+import { FavoritesContext } from '../context/FavoritesContext';
+import { DUMMY_GENRES } from '../utils/genres';
+import FavoriteButton from './FavoriteButton'; // import nuovo componente
+import './MovieCard.css';
 
-export default function MovieCard({ title, poster, genres }) {
+export default function MovieCard({ movie }) {
+    if (!movie) return null;
 
-    // URL base per i poster di TMDB (ad esempio 'w500' o 'original')
-    const POSTER_BASE_URL = 'https://image.tmdb.org/t/p/w500';
+    const { favorites, addFavorite, removeFavorite } = useContext(FavoritesContext);
+    const isFavorite = favorites.some(f => f.id === movie.id);
+    const POSTER_BASE_URL = "https://image.tmdb.org/t/p/w500";
 
     return (
-        // Usiamo una Card molto sottile (solo come contenitore)
-        <Card className="movie-card-custom">
+        <div className="movie-card-custom">
             <div className="card-content-wrapper">
-                {/* Immagine del Poster */}
-                <Card.Img 
-                    variant='top' 
-                    src={`${POSTER_BASE_URL}${poster}`} 
-                    alt={title}
+                <img
+                    src={`${POSTER_BASE_URL}${movie.poster_path}`}
+                    alt={movie.title}
                     className="card-poster"
                 />
-                
-                {/* L'overlay gradiente che sfuma l'immagine verso il nero */}
+
                 <div className="image-gradient-overlay"></div>
 
-                {/* Contenuto di testo posizionato in basso sopra l'immagine */}
                 <div className="card-text-overlay">
-                    <h5 className="movie-title-card">{title}</h5>
-                    
-                    {/* Visualizzazione dei generi (unendoli con una virgola) */}
+                    <h5 className="movie-title-card">{movie.title}</h5>
                     <p className="movie-genres-card">
-                        {genres ? genres.join(', ') : 'Generi non disponibili'}
+                        {movie.genre_ids?.map(id => DUMMY_GENRES[id] || 'Sconosciuto').join(', ')}
                     </p>
+                    <p className="movie-rating-card">⭐ {movie.vote_average?.toFixed(1)}</p>
+
+                    {/* Nuovo cuoricino animato */}
+                    <FavoriteButton
+                        isFavorite={isFavorite}
+                        onClick={() => isFavorite ? removeFavorite(movie.id) : addFavorite(movie)}
+                    />
                 </div>
             </div>
-        </Card>
+        </div>
     );
 }
