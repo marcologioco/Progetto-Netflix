@@ -82,7 +82,9 @@ function Section({ title, movies, showMore, setShowMore }) {
                             poster={movie.poster_path}
                             vote={movie.vote_average}
                             genres={movie.genre_ids.map(id => DUMMY_GENRES[id] || 'Sconosciuto')}
+                            onAddFavorite={() => handleAddFavorite(movie)}
                         />
+
                     </div>
                 ))}
             </div>

@@ -1,13 +1,14 @@
+/* Card principale */
 .movie-card-custom {
     width: 100%;
-    height: 16rem;
+    height: 300px;
     border: none;
     overflow: hidden;
     position: relative;
-    background-color: #555;
+    background-color: #141414;
     cursor: pointer;
     transition: transform 0.3s ease-in-out;
-    border-radius: 8px;
+    border-radius: 5px;
 }
 
 .card-content-wrapper {
@@ -20,52 +21,81 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+    display: block;
 }
 
+/* Gradiente inferiore */
 .image-gradient-overlay {
     position: absolute;
-    top: 0;
+    bottom: 0;
     left: 0;
     width: 100%;
-    height: 100%;
+    height: 50%;
     background: linear-gradient(
-        to bottom,
-        rgba(0, 0, 0, 0) 40%,
-        rgba(0, 0, 0, 0.6) 70%,
-        rgba(0, 0, 0, 1) 100%
+        to top,
+        rgba(20, 20, 20, 1) 0%,
+        rgba(20, 20, 20, 0.7) 30%,
+        rgba(20, 20, 20, 0) 100%
     );
     z-index: 2;
 }
 
+/* Testo sopra gradiente */
 .card-text-overlay {
     position: absolute;
-    bottom: 0;
-    width: 100%;
-    padding: 10px;
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
     color: white;
     z-index: 3;
 }
 
 .movie-title-card {
-    font-size: .9rem;
-    margin-bottom: 2px;
+    font-size: 0.9rem;
     font-weight: bold;
+    margin: 0 0 2px 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
-
 
 .movie-genres-card {
-    font-size: .65rem;
+    font-size: 0.7rem;
     color: #ccc;
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
+.movie-rating-card {
+    font-size: 0.75rem;
+    color: gold;
+    margin-top: 2px;
+}
+
+/* Hover card */
 .movie-card-custom:hover {
     transform: scale(1.05);
     z-index: 10;
 }
 
+/* Overlay pulsante preferiti */
+.card-hover-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(20, 20, 20, 0.5);
+    opacity: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.3s;
+    z-index: 4;
+}
 
-.movie-rating-card {
-    font-size: .7rem;
-    margin-top: 2px;
-    color: gold;
+.movie-card-custom:hover .card-hover-overlay {
+    opacity: 1;
 }
