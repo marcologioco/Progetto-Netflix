@@ -4,6 +4,7 @@ import MovieCard from '../components/MovieCard';
 import { FavoritesContext } from '../context/FavoritesContext';
 import './HomeStyle.css';
 import logoImage from '../assets/logo.png';
+import FavoriteButton from '../components/FavoriteButton';
 
 const DUMMY_GENRES = {
     28: 'Azione', 12: 'Avventura', 35: 'Commedia', 80: 'Crimine',
@@ -66,13 +67,16 @@ export default function Home() {
                             <h1 className="hero-title">{heroMovie.title}</h1>
                             <p className="hero-overview">{heroMovie.overview}</p>
 
+
                             {/* Bottone e stelline */}
                             <div className="hero-btn-rating">
-                                <FavoriteButton
-                                    isFavorite={favorites.some(f => f.id === heroMovie.id)}
+                                <button
+                                    className="btn hero-favorite-btn"
                                     onClick={handleFavoriteHero}
-                                />
-                                <p className="hero-rating">⭐ {heroMovie.vote_average?.toFixed(1)}</p>
+                                >
+                                    {favorites.some(f => f.id === heroMovie.id) ? "Rimuovi dai preferiti" : "Preferiti +"}
+                                </button>
+                                <span className="hero-rating">⭐ {heroMovie.vote_average?.toFixed(1)}</span>
                             </div>
 
                         </div>
@@ -84,22 +88,14 @@ export default function Home() {
             )}
 
             {/* ===================== POPOLARI ===================== */}
-            <Section
-                title="🎬 Film Popolari"
-                movies={popularMovies}
-            />
+            <FilmSection title="🎬 Film Popolari" movies={popularMovies} />
 
             {/* ===================== TOP RATED ===================== */}
-            <Section
-                title="⭐ Più Votati"
-                movies={topRatedMovies}
-            />
+            <FilmSection title="⭐ Più Votati" movies={topRatedMovies} />
 
             {/* ===================== TRENDING ===================== */}
-            <Section
-                title="🔥 In Tendenza"
-                movies={trendingMovies}
-            />
+            <FilmSection title="🔥 In Tendenza" movies={trendingMovies} />
+
         </div>
     );
 }
@@ -117,6 +113,40 @@ function Section({ title, movies }) {
                     </div>
                 ))}
             </div>
+        </div>
+    );
+}
+
+
+
+
+function FilmSection({ title, movies }) {
+    const [showAll, setShowAll] = useState(false); 
+
+    const toggleShow = () => {
+        setShowAll(prev => !prev);
+    };
+
+    const displayed = showAll ? movies : movies.slice(0, 6);
+
+    return (
+        <div className="mb-5 px-3">
+            <h2 className="text-white mb-3">{title}</h2>
+            <div className="row g-3">
+                {displayed.map(movie => (
+                    <div key={movie.id} className="col-6 col-sm-4 col-md-3 col-lg-2">
+                        <MovieCard movie={movie} />
+                    </div>
+                ))}
+            </div>
+
+            {movies.length > 6 && (
+                <div className="text-center mt-3">
+                    <button className="btn btn-outline-light" onClick={toggleShow}>
+                        {showAll ? "Mostra meno" : "Mostra altri"}
+                    </button>
+                </div>
+            )}
         </div>
     );
 }

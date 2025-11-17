@@ -71,7 +71,9 @@
 .hero-rating {
     font-size: 1.2rem;
     color: gold;
-    margin-bottom: 1rem;
+    margin: 0; 
+    display: flex;
+    align-items: center; 
 }
 
 .hero-btn {
@@ -83,7 +85,7 @@
 .hero-btn-rating {
     display: flex;
     align-items: center;
-    gap: 1rem;                 
+    gap: 1rem;
 }
 
 
@@ -116,3 +118,29 @@
     padding-top: .5rem;
     font-style:italic;
 }
+
+
+.hero-favorite-btn {
+    
+    background-color: #FF1C2A; 
+    color: white;
+    border: none;
+    font-weight: bold;
+    font-size: 1rem;
+    padding: 0.5rem 1.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+
+.hero-favorite-btn:hover {
+    background-color: #b90000; 
+    transform: scale(1.05);     
+    color: white;             
+}
+
+
+
+
+
