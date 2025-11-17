@@ -34,7 +34,24 @@ export const fetchFromTmdb = async (endpoint, params = {}) => {
 
 // ENDPOINT TMDB
 export const ENDPOINTS = {
+    // Film
     popularMovies: 'movie/popular',
     topRated: 'movie/top_rated',
+    discoverMovies: 'discover/movie',
     trending: 'trending/movie/week',
+    upcomingMovies: 'movie/upcoming', 
+    
+    // Serie TV (TV Shows)
+    popularTV: 'tv/popular',             // Le più popolari
+    topRatedTV: 'tv/top_rated',          // Le più votate
+    discoverTV: 'discover/tv',           // Per il filtraggio avanzato (es. per genere)
+    trendingTV: 'trending/tv/week',      // In tendenza
+};
+
+// ID dei generi TV usati per i filtri
+export const TV_GENRE_IDS = {
+    // Azione/Avventura per TV (ID 10759)
+    azione: 10759,
+    // Commedia (ID 35)
+    commedia: 35,
 };

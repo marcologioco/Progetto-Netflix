@@ -9,7 +9,10 @@ import Favorites from './pages/Favorites.jsx';
 import SearchResults from './pages/SearchResults.jsx';
 import MovieDetail from './pages/MovieDetail.jsx';
 
-import { FavoritesProvider } from './context/FavoritesContext.jsx'; // <-- import context
+import MoviesPage from './pages/MoviePage.jsx';
+import TvShowsPage from './pages/SerieTvPage.jsx'; // NUOVO IMPORT
+
+import { FavoritesProvider } from './context/FavoritesContext.jsx';
 
 const router = createBrowserRouter([
     { 
@@ -17,16 +20,21 @@ const router = createBrowserRouter([
         element: <App />, 
         children: [
             { index: true, element: <Home /> },
+
+            // ➤ NUOVE ROTTE Aggiunte
+            { path: 'movies', element: <MoviesPage /> },
+            { path: 'tvshows', element: <TvShowsPage /> },
+
             { path: 'favorites', element: <Favorites /> },
             { path: 'search', element: <SearchResults /> },
             { path: 'movie/:id', element: <MovieDetail /> },
-        ] 
+        ]
     }
 ]); 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
     <React.StrictMode>
-        <FavoritesProvider>  {/* <-- Wrappiamo tutta l'app */}
+        <FavoritesProvider>
             <RouterProvider router={router} />
         </FavoritesProvider>
     </React.StrictMode>

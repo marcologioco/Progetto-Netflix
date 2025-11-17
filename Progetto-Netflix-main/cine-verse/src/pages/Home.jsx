@@ -4,7 +4,6 @@ import MovieCard from '../components/MovieCard';
 import { FavoritesContext } from '../context/FavoritesContext';
 import './HomeStyle.css';
 import logoImage from '../assets/logo.png';
-import FavoriteButton from '../components/FavoriteButton';
 
 const DUMMY_GENRES = {
     28: 'Azione', 12: 'Avventura', 35: 'Commedia', 80: 'Crimine',
@@ -30,7 +29,6 @@ export default function Home() {
             setTopRatedMovies(top.results || []);
             setTrendingMovies(trend.results || []);
 
-            // Hero: prendiamo il primo film popolare
             if (pop.results?.length) setHeroMovie(pop.results[0]);
         };
 
@@ -45,93 +43,69 @@ export default function Home() {
 
     return (
         <div className="container-fluid pt-4" style={{ backgroundColor: "#141414", minHeight: "100vh" }}>
+            
             {/* HERO */}
             {heroMovie && (
                 <div className="hero-container mb-5"
                     style={{ backgroundImage: `url(https://image.tmdb.org/t/p/original${heroMovie.backdrop_path})` }}>
+                    
                     <div className="hero-gradient">
                         <div className="hero-content">
-                            {/* Logo con cerchio + scritta accanto */}
+                            
+                            {/* Logo */}
                             <div className="hero-logo-row">
                                 <div className="hero-logo-wrapper">
-                                    <img
-                                        src={logoImage}
-                                        alt="CineeVerse Logo"
-                                        className="hero-logo"
-                                    />
+                                    <img src={logoImage} alt="CineVerse Logo" className="hero-logo" />
                                 </div>
                                 <span className="hero-logo-text">CineVerse</span>
                             </div>
 
-                            {/* Titolo e testo */}
                             <h1 className="hero-title">{heroMovie.title}</h1>
                             <p className="hero-overview">{heroMovie.overview}</p>
 
-
-                            {/* Bottone e stelline */}
+                            {/* Preferiti + Rating */}
                             <div className="hero-btn-rating">
                                 <button
                                     className="btn hero-favorite-btn"
                                     onClick={handleFavoriteHero}
                                 >
-                                    {favorites.some(f => f.id === heroMovie.id) ? "Rimuovi dai preferiti" : "Preferiti +"}
+                                    {favorites.some(f => f.id === heroMovie.id)
+                                        ? "Rimuovi dai preferiti"
+                                        : "Preferiti +"}
                                 </button>
-                                <span className="hero-rating">⭐ {heroMovie.vote_average?.toFixed(1)}</span>
+
+                                <span className="hero-rating">
+                                    ⭐ {heroMovie.vote_average?.toFixed(1)}
+                                </span>
                             </div>
 
                         </div>
                     </div>
                 </div>
-
-
-
             )}
 
-            {/* ===================== POPOLARI ===================== */}
+            {/* SEZIONI FILM */}
             <FilmSection title="🎬 Film Popolari" movies={popularMovies} />
-
-            {/* ===================== TOP RATED ===================== */}
             <FilmSection title="⭐ Più Votati" movies={topRatedMovies} />
-
-            {/* ===================== TRENDING ===================== */}
             <FilmSection title="🔥 In Tendenza" movies={trendingMovies} />
-
         </div>
     );
 }
 
-function Section({ title, movies }) {
-    const displayed = movies.slice(0, 6);
-
-    return (
-        <div className="mb-5 px-3">
-            <h2 className="text-white mb-3">{title}</h2>
-            <div className="row g-3">
-                {displayed.map(movie => (
-                    <div key={movie.id} className="col-6 col-sm-4 col-md-3 col-lg-2">
-                        <MovieCard movie={movie} />
-                    </div>
-                ))}
-            </div>
-        </div>
-    );
-}
-
-
-
-
+/* ===========================
+   COMPONENTE SEZIONE UNIFICATO
+=========================== */
 function FilmSection({ title, movies }) {
-    const [showAll, setShowAll] = useState(false); 
+    const [showAll, setShowAll] = useState(false);
 
-    const toggleShow = () => {
-        setShowAll(prev => !prev);
-    };
+    const toggleShow = () => setShowAll(prev => !prev);
 
     const displayed = showAll ? movies : movies.slice(0, 6);
 
     return (
         <div className="mb-5 px-3">
             <h2 className="text-white mb-3">{title}</h2>
+            
             <div className="row g-3">
                 {displayed.map(movie => (
                     <div key={movie.id} className="col-6 col-sm-4 col-md-3 col-lg-2">
