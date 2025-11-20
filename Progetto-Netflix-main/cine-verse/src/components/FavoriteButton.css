@@ -1,50 +1,68 @@
-/* src/components/FavoriteButton.css */
-.favorite-btn {
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    outline: none;
+/* Stile Base del Cerchio */
+.favorite-btn-circle {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.6); /* Bordo semitrasparente */
+    background-color: rgba(0, 0, 0, 0.5);       /* Sfondo scuro per contrasto */
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: transform 0.2s ease;
-    color: white; /* colore iniziale */
-    position: relative;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative; /* Necessario per posizionare la scintilla */
+    outline: none;
+    z-index: 10; /* Assicura che stia sopra l'immagine */
 }
 
-/* Cuore rosso quando aggiunto */
-.favorite-active {
-    color: #E50914;
+/* Hover: leggermente più grande e chiaro */
+.favorite-btn-circle:hover {
+    border-color: white;
+    background-color: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
 }
 
-/* Animazione click tipo “pop” */
-.favorite-clicked {
-    animation: pop-heart 0.3s forwards;
+/* Stato Attivo (quando è nei preferiti) */
+.favorite-btn-circle.active {
+    border-color: #E50914;
+    background-color: rgba(20, 20, 20, 0.8);
+}
+
+/* --- ANIMAZIONI --- */
+
+/* 1. Pop del Cuore (quando cliccato) */
+.favorite-btn-circle.clicked svg {
+    animation: pop-heart 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 @keyframes pop-heart {
     0% { transform: scale(1); }
-    50% { transform: scale(1.4); }
-    100% { transform: scale(1); }
+    50% { transform: scale(1.5); } /* Diventa grande */
+    100% { transform: scale(1); }  /* Torna normale */
 }
 
-/* Optional: piccolo effetto spark */
-.favorite-btn::after {
+/* 2. Scintilla Dorata (Spark) */
+.favorite-btn-circle.clicked::after {
     content: '';
     position: absolute;
-    width: 10px;
-    height: 10px;
-    background: gold;
+    width: 100%;
+    height: 100%;
     border-radius: 50%;
+    box-shadow: 0 0 0 2px gold; /* Anello dorato */
     opacity: 0;
     top: 0;
-    left: 50%;
-    transform: translateX(-50%) translateY(-10px);
+    left: 0;
     pointer-events: none;
-    animation: spark 0.5s ease-out forwards;
+    animation: spark-burst 0.4s ease-out forwards;
 }
 
-@keyframes spark {
-    0% { opacity: 1; transform: translateX(-50%) translateY(0) scale(0.5); }
-    100% { opacity: 0; transform: translateX(-50%) translateY(-20px) scale(1); }
+@keyframes spark-burst {
+    0% { 
+        opacity: 1; 
+        transform: scale(0.5); 
+    }
+    100% { 
+        opacity: 0; 
+        transform: scale(1.8); /* Si espande e svanisce */
+    }
 }

@@ -4,12 +4,7 @@ import MovieCard from '../components/MovieCard';
 import { FavoritesContext } from '../context/FavoritesContext';
 import './HomeStyle.css';
 import logoImage from '../assets/logo.png';
-
-const DUMMY_GENRES = {
-    28: 'Azione', 12: 'Avventura', 35: 'Commedia', 80: 'Crimine',
-    18: 'Drammatico', 53: 'Thriller', 10749: 'Romance', 14: 'Fantasy',
-    878: 'Fantascienza', 10752: 'Guerra'
-};
+import { InfoCircle, Check, Plus } from 'react-bootstrap-icons';
 
 export default function Home() {
     const [popularMovies, setPopularMovies] = useState([]);
@@ -21,15 +16,21 @@ export default function Home() {
 
     useEffect(() => {
         const loadAll = async () => {
-            const pop = await fetchFromTmdb(ENDPOINTS.popularMovies);
-            const top = await fetchFromTmdb(ENDPOINTS.topRated);
-            const trend = await fetchFromTmdb(ENDPOINTS.trending);
+            try {
+                const pop = await fetchFromTmdb(ENDPOINTS.popularMovies);
+                const top = await fetchFromTmdb(ENDPOINTS.topRated);
+                const trend = await fetchFromTmdb(ENDPOINTS.trending);
 
-            setPopularMovies(pop.results || []);
-            setTopRatedMovies(top.results || []);
-            setTrendingMovies(trend.results || []);
+                setPopularMovies(pop.results || []);
+                setTopRatedMovies(top.results || []);
+                setTrendingMovies(trend.results || []);
 
-            if (pop.results?.length) setHeroMovie(pop.results[0]);
+                if (pop.results?.length) {
+                    setHeroMovie(pop.results[0]);
+                }
+            } catch (error) {
+                console.error("Errore API:", error);
+            }
         };
 
         loadAll();
@@ -41,10 +42,12 @@ export default function Home() {
         else addFavorite(heroMovie);
     };
 
+    const isHeroFavorite = heroMovie && favorites.some(f => f.id === heroMovie.id);
+
     return (
-        <div className="container-fluid pt-4" style={{ backgroundColor: "#141414", minHeight: "100vh" }}>
+        <div className="home-container-main" style={{ backgroundColor: "#141414", minHeight: "100vh" }}>
             
-            {/* HERO */}
+            {/* HERO SECTION */}
             {heroMovie && (
                 <div className="hero-container mb-5"
                     style={{ backgroundImage: `url(https://image.tmdb.org/t/p/original${heroMovie.backdrop_path})` }}>
@@ -52,59 +55,63 @@ export default function Home() {
                     <div className="hero-gradient">
                         <div className="hero-content">
                             
-                            {/* Logo */}
-                            <div className="hero-logo-row">
-                                <div className="hero-logo-wrapper">
-                                    <img src={logoImage} alt="CineVerse Logo" className="hero-logo" />
-                                </div>
-                                <span className="hero-logo-text">CineVerse</span>
+                            {/* Branding */}
+                            <div className="hero-branding mb-3">
+                                <img src={logoImage} alt="CineVerse" className="hero-brand-logo" />
+                                <span className="hero-brand-text">SERIE</span>
                             </div>
 
                             <h1 className="hero-title">{heroMovie.title}</h1>
+                            
+                            {/* Metadata */}
+                            <div className="hero-metadata mb-3">
+                                <span className="match-score">98% Match</span>
+                                <span className="year">{heroMovie.release_date?.substring(0,4)}</span>
+                                <span className="rating-box">VM14</span>
+                            </div>
+
                             <p className="hero-overview">{heroMovie.overview}</p>
 
-                            {/* Preferiti + Rating */}
-                            <div className="hero-btn-rating">
+                            {/* Bottoni */}
+                            <div className="hero-buttons d-flex gap-3 mt-4">
                                 <button
-                                    className="btn hero-favorite-btn"
+                                    className="btn hero-btn-primary d-flex align-items-center gap-2"
                                     onClick={handleFavoriteHero}
                                 >
-                                    {favorites.some(f => f.id === heroMovie.id)
-                                        ? "Rimuovi dai preferiti"
-                                        : "Preferiti +"}
+                                    {isHeroFavorite ? <Check size={24} /> : <Plus size={24} />}
+                                    {isHeroFavorite ? "Nella Lista" : "La mia lista"}
                                 </button>
 
-                                <span className="hero-rating">
-                                    ⭐ {heroMovie.vote_average?.toFixed(1)}
-                                </span>
+                                <button className="btn hero-btn-secondary d-flex align-items-center gap-2">
+                                    <InfoCircle size={20} />
+                                    Altre info
+                                </button>
                             </div>
 
                         </div>
                     </div>
+                    <div className="hero-fade-bottom"></div>
                 </div>
             )}
 
-            {/* SEZIONI FILM */}
-            <FilmSection title="🎬 Film Popolari" movies={popularMovies} />
-            <FilmSection title="⭐ Più Votati" movies={topRatedMovies} />
-            <FilmSection title="🔥 In Tendenza" movies={trendingMovies} />
+            {/* LISTE FILM */}
+            <div className="movies-sliders-container container-fluid px-4">
+                <FilmSection title="🎬 Popolari su CineVerse" movies={popularMovies} />
+                <FilmSection title="⭐ I più votati dalla critica" movies={topRatedMovies} />
+                <FilmSection title="🔥 In Tendenza ora" movies={trendingMovies} />
+            </div>
         </div>
     );
 }
 
-/* ===========================
-   COMPONENTE SEZIONE UNIFICATO
-=========================== */
 function FilmSection({ title, movies }) {
     const [showAll, setShowAll] = useState(false);
-
     const toggleShow = () => setShowAll(prev => !prev);
-
     const displayed = showAll ? movies : movies.slice(0, 6);
 
     return (
-        <div className="mb-5 px-3">
-            <h2 className="text-white mb-3">{title}</h2>
+        <div className="mb-5 movie-section">
+            <h3 className="text-white mb-3 fw-bold">{title}</h3>
             
             <div className="row g-3">
                 {displayed.map(movie => (
@@ -115,9 +122,9 @@ function FilmSection({ title, movies }) {
             </div>
 
             {movies.length > 6 && (
-                <div className="text-center mt-3">
-                    <button className="btn btn-outline-light" onClick={toggleShow}>
-                        {showAll ? "Mostra meno" : "Mostra altri"}
+                <div className="text-end mt-2">
+                    <button className="btn btn-link text-decoration-none text-secondary" onClick={toggleShow} style={{fontSize: '0.8rem'}}>
+                        {showAll ? "Vedi meno" : "Vedi tutti >"}
                     </button>
                 </div>
             )}

@@ -10,7 +10,7 @@ import SearchResults from './pages/SearchResults.jsx';
 import MovieDetail from './pages/MovieDetail.jsx';
 
 import MoviesPage from './pages/MoviePage.jsx';
-import TvShowsPage from './pages/SerieTvPage.jsx'; // NUOVO IMPORT
+import TvShowsPage from './pages/SerieTvPage.jsx'; 
 
 import { FavoritesProvider } from './context/FavoritesContext.jsx';
 

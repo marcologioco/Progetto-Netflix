@@ -1,36 +1,59 @@
-body {
-    padding-top: 80px;
+/* Transizione fluida per background e padding */
+.transition-navbar {
+    transition: all 0.4s ease-in-out;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
 }
 
-.bg-navbar {
+/* Stato iniziale: Trasparente ma con sfumatura scura per leggere il testo */
+.navbar-transparent {
+    background: linear-gradient(to bottom, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%);
+    box-shadow: none;
+}
+
+/* Stato scrollato: Il tuo gradiente personalizzato */
+.navbar-scrolled {
     background: linear-gradient(to right, #b90000 0%, #610000 30%, #300101 70%, #000000 100%);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-    padding: 0.5rem 1rem;
-    z-index: 1050;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    padding-top: 0.5rem !important; /* Diventa più sottile */
+    padding-bottom: 0.5rem !important;
 }
 
+/* STILE LOGO CON CERCHIETTO BIANCO */
+.navbar-logo {
+    height: 45px;        /* Altezza fissa */
+    width: 45px;         /* Larghezza fissa uguale all'altezza per il cerchio */
+    padding: 6px;        /* Spazio tra il logo nero e il bordo bianco */
+    background-color: white; /* Sfondo bianco */
+    border-radius: 50%;  /* Lo rende un cerchio perfetto */
+    object-fit: contain; /* Mantiene le proporzioni del logo interno */
+    transition: all 0.3s;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* Leggera ombra */
+}
+
+/* Quando si scolla, il cerchio si rimpicciolisce leggermente */
+.navbar-scrolled .navbar-logo {
+    height: 40px;
+    width: 40px;
+    padding: 4px;
+}
+
+/* Link */
 .navbar-nav .nav-link {
-    color: white;
+    color: #e5e5e5;
     font-weight: 500;
+    font-size: 0.9rem;
     margin-right: 1rem;
     transition: color 0.2s;
 }
 
-.navbar-nav .nav-link:hover {
-    color: #E50914;
-}
-
+.navbar-nav .nav-link:hover,
 .navbar-nav .nav-link.active {
-    color: #E50914;
+    color: #ffffff;
+    font-weight: 700;
 }
 
-.search-icon:hover svg {
-    color: #E50914;
+/* Icona Hamburger Menu Bianca */
+.navbar-toggler-icon {
+    filter: invert(1);
 }
-
-.badge.bg-danger {
-    font-size: 0.75rem;
-    padding: 0.25em 0.5em;
-}
-
-
