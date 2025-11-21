@@ -14,8 +14,8 @@ export default function MovieCard({ movie }) {
 
     // Colore badge voto in base al punteggio
     const getRatingColor = (vote) => {
-        if (vote >= 8) return '#46d369'; // Verde
-        if (vote >= 6) return '#ffc107'; // Giallo
+        if (vote >= 7.8 ) return '#46d369'; // Verde
+        if (vote >= 6 && vote <=7.7 ) return '#ffc107'; // Giallo
         return '#f44336'; // Rosso
     };
 
