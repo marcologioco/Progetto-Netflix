@@ -1,50 +1,78 @@
+// src/components/MovieCard.jsx
+
 import React, { useContext } from 'react';
 import { FavoritesContext } from '../context/FavoritesContext';
-import { DUMMY_GENRES } from '../utils/genres'; // Assicurati che questo path sia corretto
+import { DUMMY_GENRES } from '../utils/genres'; 
 import FavoriteButton from './FavoriteButton';
+import SerieTvPage from '../pages/SerieTvPage';
 import './MovieCard.css';
 import { StarFill } from 'react-bootstrap-icons';
 
-export default function MovieCard({ movie }) {
-    if (!movie) return null;
+// Questo componente accetta DUE prop: 'media' (dalla ricerca) e 'movie' (dalle pagine Film/Serie TV).
+export default function MovieCard({ media, movie }) { 
+    
+    // DECISIONE CHIAVE: L'oggetto dati è 'media' se esiste, altrimenti è 'movie'.
+    const item = media || movie;
+    
+    if (!item) return null;
 
     const { favorites, addFavorite, removeFavorite } = useContext(FavoritesContext);
-    const isFavorite = favorites.some(f => f.id === movie.id);
+    const isFavorite = favorites.some(f => f.id === item.id);
     const POSTER_BASE_URL = "https://image.tmdb.org/t/p/w500";
+
+    // -----------------------------------------------------
+    // LOGICA UNIVERSALE DEI CAMPI
+    // -----------------------------------------------------
+    // isMovie: Se media_type è 'movie' OPPURE se ha release_date (tipico dei film) e non ha media_type (vecchi dati)
+    const isMovie = item.media_type === 'movie' || (item.release_date && !item.media_type); 
+    const title = item.title || item.name; // Usa 'title' o 'name'
+    const releaseDate = item.release_date || item.first_air_date; // Usa release_date o first_air_date
+    const voteAverage = item.vote_average;
+    // -----------------------------------------------------
 
     // Colore badge voto in base al punteggio
     const getRatingColor = (vote) => {
-        if (vote >= 7.8 ) return '#46d369'; // Verde
-        if (vote >= 6 && vote <=7.7 ) return '#ffc107'; // Giallo
-        return '#f44336'; // Rosso
+        if (vote >= 7.8 ) return '#46d369';
+        if (vote >= 6 && vote <=7.7 ) return '#ffc107';
+        return '#f44336';
     };
+    
+    // Non renderizzare se manca il poster
+    if (!item.poster_path) return null; 
 
     return (
         <div className="movie-card-modern">
             {/* Immagine Sfondo */}
             <div className="poster-wrapper">
                 <img
-                    src={movie.poster_path ? `${POSTER_BASE_URL}${movie.poster_path}` : 'https://via.placeholder.com/500x750?text=No+Poster'}
-                    alt={movie.title}
+                    src={`${POSTER_BASE_URL}${item.poster_path}`} 
+                    alt={title}
                     className="card-poster"
                 />
                 
-                {/* Badge Voto in alto a destra */}
-                <div className="rating-badge" style={{backgroundColor: getRatingColor(movie.vote_average)}}>
-                    <span className="rating-text">{movie.vote_average?.toFixed(1)}</span>
+                {/* Badge Voto */}
+                <div className="rating-badge" style={{backgroundColor: getRatingColor(voteAverage)}}>
+                    <span className="rating-text">{voteAverage?.toFixed(1)}</span>
                 </div>
             </div>
 
-            {/* Overlay Scuro che appare sempre un po', ma si intensifica all'hover */}
+            {/* Overlay Scuro */}
             <div className="content-overlay">
                 <div className="content-details">
-                    <h5 className="movie-title">{movie.title}</h5>
+                    <h5 className="movie-title">{title}</h5>
                     
                     <div className="meta-info">
-                        <span className="movie-year">{movie.release_date?.substring(0, 4) || 'N/A'}</span>
+                        <span className="movie-year">{releaseDate?.substring(0, 4) || 'N/A'}</span>
                         <span className="separator">•</span>
+                        
+                        {/* Mostra il tipo solo se media_type è presente */}
+                        <span className="media-type">
+                            {item.media_type ? (isMovie ? 'Film' : 'Serie TV') : ''}
+                        </span>
+                        {item.media_type && <span className="separator">•</span>}
+
                         <span className="movie-genre">
-                            {movie.genre_ids?.slice(0, 2).map(id => DUMMY_GENRES[id]).filter(Boolean).join(', ') || 'Film'}
+                            {item.genre_ids?.slice(0, 2).map(id => DUMMY_GENRES[id]).filter(Boolean).join(', ') || 'N/A'}
                         </span>
                     </div>
 
@@ -52,11 +80,10 @@ export default function MovieCard({ movie }) {
                         <FavoriteButton
                             isFavorite={isFavorite}
                             onClick={(e) => {
-                                e.stopPropagation(); // Evita click sulla card se aggiungi navigazione
-                                isFavorite ? removeFavorite(movie.id) : addFavorite(movie);
+                                e.stopPropagation(); 
+                                isFavorite ? removeFavorite(item.id) : addFavorite(item);
                             }}
                         />
-                        {/* Qui potresti aggiungere un bottone Play in futuro */}
                     </div>
                 </div>
             </div>

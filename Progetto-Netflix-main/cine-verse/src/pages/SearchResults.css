@@ -1,0 +1,29 @@
+/* pages/SearchResults.css */
+.search-results-page {
+    padding-top: 100px; /* Spazio per la navbar fissa */
+    padding-left: 4%;
+    padding-right: 4%;
+    min-height: 100vh;
+    background-color: #141414; /* Sfondo scuro */
+}
+
+.search-title {
+    color: white;
+    margin-bottom: 30px;
+    font-size: 2rem;
+}
+
+.results-grid {
+    display: grid;
+    /* Adatta il numero di colonne in base alle dimensioni dello schermo */
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); 
+    gap: 15px;
+}
+
+/* Messaggi di stato */
+.loading-message, .error-message, .no-results-message {
+    color: #e5e5e5;
+    font-size: 1.2rem;
+    text-align: center;
+    grid-column: 1 / -1; /* Centra il testo su tutta la griglia */
+}

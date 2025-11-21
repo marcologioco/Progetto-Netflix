@@ -1,3 +1,5 @@
+// src/api/tmdb.js
+
 const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
 
 // CHIAVE API 
@@ -34,18 +36,39 @@ export const fetchFromTmdb = async (endpoint, params = {}) => {
 
 // ENDPOINT TMDB
 export const ENDPOINTS = {
-    // Film
+    // ... (endpoint esistenti)
     popularMovies: 'movie/popular',
     topRated: 'movie/top_rated',
     discoverMovies: 'discover/movie',
     trending: 'trending/movie/week',
     upcomingMovies: 'movie/upcoming', 
-    
-    // Serie TV (TV Shows)
-    popularTV: 'tv/popular',             // Le più popolari
-    topRatedTV: 'tv/top_rated',          // Le più votate
-    discoverTV: 'discover/tv',           // Per il filtraggio avanzato (es. per genere)
-    trendingTV: 'trending/tv/week',      // In tendenza
+    popularTV: 'tv/popular',             
+    topRatedTV: 'tv/top_rated',          
+    discoverTV: 'discover/tv',           
+    trendingTV: 'trending/tv/week',      
+
+    // NUOVO ENDPOINT PER LA RICERCA
+    searchMulti: 'search/multi',
+};
+
+// NUOVA FUNZIONE: per eseguire la ricerca
+export const searchContent = async (query) => {
+    if (!query || query.trim() === '') {
+        return [];
+    }
+
+    try {
+        const data = await fetchFromTmdb(ENDPOINTS.searchMulti, { query });
+        
+        // Filtra i risultati per includere solo 'movie' o 'tv' e assicurarsi che abbiano un poster
+        return data.results.filter(item => 
+            (item.media_type === 'movie' || item.media_type === 'tv') && item.poster_path
+        );
+
+    } catch (error) {
+        console.error("Errore durante la ricerca del contenuto:", error);
+        return [];
+    }
 };
 
 // ID dei generi TV usati per i filtri

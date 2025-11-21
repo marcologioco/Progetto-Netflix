@@ -21,7 +21,7 @@ const router = createBrowserRouter([
         children: [
             { index: true, element: <Home /> },
 
-            // ➤ NUOVE ROTTE Aggiunte
+            
             { path: 'movies', element: <MoviesPage /> },
             { path: 'tvshows', element: <TvShowsPage /> },
 
