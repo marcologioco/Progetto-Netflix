@@ -5,56 +5,54 @@ import { DUMMY_GENRES } from '../utils/genres.js';
 import FavoriteButton from './FavoriteButton.jsx';
 import './MovieCard.css';
 
-export default function MovieCard({ movie }) {
+export default function MovieCard({ media, movie }) {
     const navigate = useNavigate();
 
-    if (!movie) return null;
+    // Unifichiamo i dati (supporta sia ricerca che liste standard)
+    const item = media || movie;
+
+    if (!item) return null;
 
     const { favorites, addFavorite, removeFavorite } = useContext(FavoritesContext);
     
-    // Confronto sicuro convertendo in stringa
-    const isFavorite = favorites.some(f => String(f.id) === String(movie.id));
+    // Confronto sicuro dell'ID
+    const isFavorite = favorites.some(f => String(f.id) === String(item.id));
     const POSTER_BASE_URL = "https://image.tmdb.org/t/p/w500";
 
-    // Colore badge voto
     const getRatingColor = (vote) => {
         if (vote > 7.7) return '#46d369';
         if (vote >= 6 && vote <= 7.7) return '#ffc107';
         return '#f44336';
     };
 
-    // --- LOGICA INTELLIGENTE PER IL CLICK ---
+    // LOGICA DI CLICK (Con passaggio dati istantaneo)
     const handleCardClick = () => {
-        // Capisce se è una serie guardando se ha proprietà tipiche delle serie
-        // (first_air_date o name invece di release_date o title)
-        const isTvShow = movie.first_air_date || movie.name || movie.media_type === 'tv';
+        // Capisce se è TV o Film
+        const isTvShow = item.media_type === 'tv' || item.first_air_date || item.name;
         
-        const targetPath = isTvShow ? `/tv/${movie.id}` : `/movie/${movie.id}`;
+        const targetPath = isTvShow ? `/tv/${item.id}` : `/movie/${item.id}`;
 
-        // Passiamo i dati nello state per visualizzazione immediata
         navigate(targetPath, { 
             state: { 
-                movie: movie,
+                movie: item, 
                 isTvShow: isTvShow 
             } 
         });
     };
 
-    // Normalizza i dati per la visualizzazione (Titolo vs Nome)
-    const title = movie.title || movie.name;
-    const date = movie.release_date || movie.first_air_date;
+    const title = item.title || item.name;
+    const date = item.release_date || item.first_air_date;
 
     return (
         <div className="movie-card-modern" onClick={handleCardClick}>
             <div className="poster-wrapper">
                 <img
-                    src={movie.poster_path ? `${POSTER_BASE_URL}${movie.poster_path}` : 'https://via.placeholder.com/500x750?text=No+Poster'}
+                    src={item.poster_path ? `${POSTER_BASE_URL}${item.poster_path}` : 'https://via.placeholder.com/500x750?text=No+Poster'}
                     alt={title}
                     className="card-poster"
                 />
-                
-                <div className="rating-badge" style={{backgroundColor: getRatingColor(movie.vote_average)}}>
-                    <span className="rating-text">{movie.vote_average?.toFixed(1)}</span>
+                <div className="rating-badge" style={{backgroundColor: getRatingColor(item.vote_average)}}>
+                    <span className="rating-text">{item.vote_average?.toFixed(1)}</span>
                 </div>
             </div>
 
@@ -65,8 +63,18 @@ export default function MovieCard({ movie }) {
                     <div className="meta-info">
                         <span className="movie-year">{date?.substring(0, 4) || 'N/A'}</span>
                         <span className="separator">•</span>
+                        
+                        {item.media_type && (
+                            <>
+                                <span className="media-type" style={{fontSize: '0.6rem', border: '1px solid #666', padding: '0 4px', borderRadius: '4px', color:'#ccc'}}>
+                                    {item.media_type === 'tv' ? 'TV' : 'Film'}
+                                </span>
+                                <span className="separator">•</span>
+                            </>
+                        )}
+
                         <span className="movie-genre">
-                            {movie.genre_ids?.slice(0, 2).map(id => DUMMY_GENRES[id] || 'Genere').filter(Boolean).join(', ') || 'Info'}
+                            {item.genre_ids?.slice(0, 2).map(id => DUMMY_GENRES[id] || 'Genere').filter(Boolean).join(', ') || 'Info'}
                         </span>
                     </div>
 
@@ -74,8 +82,8 @@ export default function MovieCard({ movie }) {
                         <FavoriteButton
                             isFavorite={isFavorite}
                             onClick={(e) => {
-                                e.stopPropagation(); // Evita che il click sul cuore apra la pagina dettaglio
-                                isFavorite ? removeFavorite(movie.id) : addFavorite(movie);
+                                e.stopPropagation(); 
+                                isFavorite ? removeFavorite(item.id) : addFavorite(item);
                             }}
                         />
                     </div>

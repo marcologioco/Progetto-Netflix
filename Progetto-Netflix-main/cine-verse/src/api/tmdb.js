@@ -1,57 +1,51 @@
-const TMDB_BASE_URL = 'https://api.themoviedb.org/3';
+const API_KEY = "4e6c24759d6bacacc8b69a032480180c"; // La tua chiave
+const BASE_URL = "https://api.themoviedb.org/3";
 
-// CHIAVE API 
-const TMDB_API_KEY = '4e6c24759d6bacacc8b69a032480180c';
+export const ENDPOINTS = {
+    popularMovies: "/movie/popular",
+    topRated: "/movie/top_rated",
+    trending: "/trending/movie/week",
+    upcomingMovies: "/movie/upcoming",
+    discoverMovies: "/discover/movie",
+    
+    popularTV: "/tv/popular",
+    topRatedTV: "/tv/top_rated",
+    trendingTV: "/trending/tv/week",
+    discoverTV: "/discover/tv",
+    onTheAir: "/tv/on_the_air"
+};
 
-// Funzione riutilizzabile per il fetching
+export const TV_GENRE_IDS = {
+    azione: 10759,
+    commedia: 35
+};
+
 export const fetchFromTmdb = async (endpoint, params = {}) => {
-    const defaultParams = {
-        api_key: TMDB_API_KEY,
-        language: 'it-IT',
-        ...params,
-    };
-
-    const queryString = new URLSearchParams(defaultParams).toString();
-    const url = `${TMDB_BASE_URL}/${endpoint}?${queryString}`;
-
     try {
+        // Rimuovi eventuale slash iniziale per evitare doppi slash
+        const cleanEndpoint = endpoint.startsWith('/') ? endpoint.slice(1) : endpoint;
+        
+        const url = new URL(`${BASE_URL}/${cleanEndpoint}`);
+        url.searchParams.append("api_key", API_KEY);
+        url.searchParams.append("language", "it-IT");
+
+        Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
+
         const response = await fetch(url);
 
-        if (!response.ok) {
-            const errorData = await response.json();
-            console.error("ERRORE TMDB (Verifica la chiave API!):", errorData);
-            throw new Error(`Errore HTTP ${response.status}: ${errorData.status_message}`);
+        // Gestione specifica 404: ritorna null invece di lanciare errore
+        if (response.status === 404) {
+            console.warn(`Risorsa non trovata (404): ${cleanEndpoint}`);
+            return null;
         }
 
-        const data = await response.json();
-        return data;
+        if (!response.ok) {
+            throw new Error(`Errore HTTP ${response.status}`);
+        }
 
+        return await response.json();
     } catch (error) {
-        console.error("Errore generico durante il fetch:", error);
-        return { results: [] };
+        console.error("Errore fetchFromTmdb:", error);
+        return null;
     }
-};
-
-// ENDPOINT TMDB
-export const ENDPOINTS = {
-    // Film
-    popularMovies: 'movie/popular',
-    topRated: 'movie/top_rated',
-    discoverMovies: 'discover/movie',
-    trending: 'trending/movie/week',
-    upcomingMovies: 'movie/upcoming', 
-    
-    // Serie TV (TV Shows)
-    popularTV: 'tv/popular',             // Le più popolari
-    topRatedTV: 'tv/top_rated',          // Le più votate
-    discoverTV: 'discover/tv',           // Per il filtraggio avanzato (es. per genere)
-    trendingTV: 'trending/tv/week',      // In tendenza
-};
-
-// ID dei generi TV usati per i filtri
-export const TV_GENRE_IDS = {
-    // Azione/Avventura per TV (ID 10759)
-    azione: 10759,
-    // Commedia (ID 35)
-    commedia: 35,
 };

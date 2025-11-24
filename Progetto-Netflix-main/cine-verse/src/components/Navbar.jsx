@@ -1,6 +1,8 @@
+// src/components/Navbar.jsx
+
 import React, { useContext, useState, useEffect } from 'react';
-import { Link, NavLink } from 'react-router-dom';
-import { Search, HeartFill, Bell, PersonCircle } from 'react-bootstrap-icons';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { Search, HeartFill, Bell, PersonCircle, X } from 'react-bootstrap-icons';
 import './Navbar.css';
 import logoImage from '../assets/logo.png';
 import { FavoritesContext } from '../context/FavoritesContext';
@@ -8,20 +10,38 @@ import { FavoritesContext } from '../context/FavoritesContext';
 export default function NavBar() {
     const { favorites } = useContext(FavoritesContext);
     const [isScrolled, setIsScrolled] = useState(false);
+    const [isSearchOpen, setIsSearchOpen] = useState(false); // Stato per aprire/chiudere la barra
+    const [searchQuery, setSearchQuery] = useState(''); // Stato per l'input di ricerca
+    const navigate = useNavigate(); 
 
     // Gestione dello scroll per cambiare sfondo navbar
     useEffect(() => {
         const handleScroll = () => {
-            if (window.scrollY > 50) {
-                setIsScrolled(true);
-            } else {
-                setIsScrolled(false);
-            }
+            setIsScrolled(window.scrollY > 50);
         };
 
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
+
+    // Funzione: Toggle della barra di ricerca
+    const handleSearchToggle = () => {
+        if (isSearchOpen) {
+            setSearchQuery(''); 
+        }
+        setIsSearchOpen(!isSearchOpen);
+    };
+
+    // Funzione: Gestione dell'invio della ricerca
+    const handleSearchSubmit = (e) => {
+        e.preventDefault();
+        if (searchQuery.trim()) {
+            // Naviga alla pagina /search passando il termine come parametro URL
+            navigate(`/search?query=${searchQuery.trim()}`);
+            setIsSearchOpen(false); // Chiudi la barra dopo l'invio
+            setSearchQuery('');
+        }
+    };
 
     return (
         <nav className={`navbar navbar-expand-lg fixed-top px-4 transition-navbar ${isScrolled ? 'navbar-scrolled' : 'navbar-transparent'}`}>
@@ -64,12 +84,33 @@ export default function NavBar() {
 
                     {/* Icone a destra */}
                     <ul className="navbar-nav ms-auto d-flex align-items-center gap-3">
-                        {/* Ricerca */}
-                        <li className="nav-item">
-                            <NavLink to="/search" className="nav-link search-icon">
+                        
+                        {/* -------------------- RICERCA MODIFICATA -------------------- */}
+                        <li className="nav-item search-container">
+                            {/* Icona Lente fissa */}
+                            <span className="nav-link search-icon" onClick={handleSearchToggle} style={{ cursor: 'pointer' }}>
                                 <Search size={20} color="white" />
-                            </NavLink>
+                            </span>
+                            
+                            {/* Barra di Ricerca Assoluta (condizionale) */}
+                            {isSearchOpen && (
+                                <form onSubmit={handleSearchSubmit} className="search-form-absolute">
+                                    <input
+                                        type="text"
+                                        placeholder="Cerca film o serie TV..."
+                                        value={searchQuery}
+                                        onChange={(e) => setSearchQuery(e.target.value)}
+                                        autoFocus
+                                        className="search-input-absolute"
+                                    />
+                                    {/* Bottone Chiudi */}
+                                    <button type="button" className="close-search-btn" onClick={handleSearchToggle}>
+                                        <X size={24} color="white" />
+                                    </button>
+                                </form>
+                            )}
                         </li>
+                        {/* ----------------------------------------------------------- */}
 
                         {/* Preferiti */}
                         <li className="nav-item">
