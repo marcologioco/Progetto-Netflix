@@ -60,8 +60,6 @@
 
 
 
-
-
 .search-container {
     position: relative; /* Importante per posizionare la barra assoluta */
     /* Assicurati che non ci sia padding orizzontale su questo nav-item
@@ -145,4 +143,88 @@
 
 .close-search-btn:hover svg {
     color: #ffffff; /* Bianco al hover */
+}
+
+
+@media (max-width: 991.98px) { 
+    
+    /* Forza tutti gli elementi del menu a tendina ad allinearsi a sinistra */
+    .navbar-collapse.show {
+        align-items: flex-start !important;
+    }
+
+    /* Pulizia dei link principali */
+    .navbar-collapse.show .navbar-nav.me-auto {
+        align-items: flex-start;
+        text-align: left;
+        margin-bottom: 0 !important; 
+    }
+    
+    /* Pulizia delle icone */
+    .navbar-collapse.show .mobile-icon-list {
+        margin-left: 0 !important; 
+        margin-right: 0 !important;
+        /* CRUCIALE: Ripristina allineamento a sinistra per la lista di icone/barra */
+        align-items: flex-start; 
+        flex-direction: column; 
+        padding-top: 15px; 
+    }
+    
+    /* Assicura che la lente e il cuore siano elementi blocco a sinistra */
+    .navbar-collapse.show .mobile-icon-list .nav-item {
+        width: 100%;
+        text-align: left; 
+        padding-bottom: 10px; 
+    }
+
+    /* Nasconde le icone desktop su mobile */
+    .navbar-collapse.show .d-none.d-lg-block {
+        display: none !important;
+    }
+    
+    /* -------------- MODIFICHE ESSENZIALI PER LA RICERCA MOBILE -------------- */
+    
+    /* 1. Rimuovi il posizionamento assoluto per il contenitore della lente */
+    .navbar-collapse.show .search-container {
+        position: static !important;
+    }
+
+    /* 2. Stile per la barra di ricerca IN LINEA (quando il menu è aperto) */
+    .navbar-collapse.show .mobile-inline-search {
+        position: static !important; 
+        
+        /* Modifica cruciale per la dimensione e l'allineamento */
+        width: 50%; 
+        margin: 5px 0 5px 15px; /* Top/Bottom 5px, Left 15px, Right 0 */
+        
+        /* Mantiene lo stile visibile del desktop */
+        background-color: #202020 !important; 
+        border: 1px solid #ff4500 !important; 
+        border-radius: 8px !important;
+        padding: 5px 10px !important; 
+        
+        display: flex; 
+        align-items: center;
+        animation: none;
+        box-sizing: border-box; 
+    }
+
+    /* 3. Stile per l'input di ricerca */
+    .navbar-collapse.show .mobile-inline-search .search-input-absolute {
+        background: transparent !important; 
+        border: none !important;
+        padding: 0 !important;
+        flex-grow: 1;
+        outline: none;
+    }
+    
+    /* 4. Nascondi il bottone di chiusura (X) su mobile */
+    .navbar-collapse.show .close-search-btn {
+        display: none !important;
+    }
+
+    /* 5. La lente quando è mostrata nel menu a tendina deve essere allineata a sinistra */
+    .navbar-collapse.show .search-icon {
+        padding-left: 0;
+    }
 }

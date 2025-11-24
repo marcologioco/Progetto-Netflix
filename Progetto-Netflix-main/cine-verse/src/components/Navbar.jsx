@@ -2,7 +2,7 @@
 
 import React, { useContext, useState, useEffect } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
-import { Search, HeartFill, Bell, PersonCircle, X } from 'react-bootstrap-icons';
+import { Search, HeartFill, Bell, PersonCircle, X } from 'react-bootstrap-icons'; 
 import './Navbar.css';
 import logoImage from '../assets/logo.png';
 import { FavoritesContext } from '../context/FavoritesContext';
@@ -10,9 +10,13 @@ import { FavoritesContext } from '../context/FavoritesContext';
 export default function NavBar() {
     const { favorites } = useContext(FavoritesContext);
     const [isScrolled, setIsScrolled] = useState(false);
-    const [isSearchOpen, setIsSearchOpen] = useState(false); // Stato per aprire/chiudere la barra
-    const [searchQuery, setSearchQuery] = useState(''); // Stato per l'input di ricerca
-    const navigate = useNavigate(); 
+    const [isSearchOpen, setIsSearchOpen] = useState(false); 
+    const [searchQuery, setSearchQuery] = useState(''); 
+    
+    // STATO PER IL MENU MOBILE (HAMBURGER)
+    const [isMenuOpen, setIsMenuOpen] = useState(false); 
+    
+    const navigate = useNavigate();
 
     // Gestione dello scroll per cambiare sfondo navbar
     useEffect(() => {
@@ -30,21 +34,38 @@ export default function NavBar() {
             setSearchQuery(''); 
         }
         setIsSearchOpen(!isSearchOpen);
+        // Chiude il menu mobile se si apre la ricerca su desktop (non rilevante qui, ma buona prassi)
+        if (isMenuOpen && !isSearchOpen) {
+            // Se apri la ricerca in modalità mobile, il menu rimane aperto e la lente scompare
+            // ma se chiudi la ricerca, non chiudere il menu.
+        }
     };
 
+    // Funzione: Toggle del menu mobile
+    const handleMenuToggle = () => {
+        setIsMenuOpen(!isMenuOpen);
+        // Chiude la barra di ricerca quando si apre il menu mobile
+        if (isSearchOpen) { 
+            setIsSearchOpen(false); 
+        }
+    };
+    
     // Funzione: Gestione dell'invio della ricerca
     const handleSearchSubmit = (e) => {
         e.preventDefault();
         if (searchQuery.trim()) {
-            // Naviga alla pagina /search passando il termine come parametro URL
             navigate(`/search?query=${searchQuery.trim()}`);
-            setIsSearchOpen(false); // Chiudi la barra dopo l'invio
+            setIsSearchOpen(false); 
             setSearchQuery('');
         }
     };
 
     return (
-        <nav className={`navbar navbar-expand-lg fixed-top px-4 transition-navbar ${isScrolled ? 'navbar-scrolled' : 'navbar-transparent'}`}>
+        <nav 
+            className={`navbar navbar-expand-lg fixed-top px-4 transition-navbar ${
+                isScrolled ? 'navbar-scrolled' : 'navbar-transparent'
+            }`}
+        >
             <div className='container-fluid'>
                 {/* Logo */}
                 <Link to="/" className='navbar-brand d-flex align-items-center'>
@@ -59,42 +80,69 @@ export default function NavBar() {
                 <button
                     className="navbar-toggler"
                     type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#navbarNav"
+                    onClick={handleMenuToggle} 
                     aria-controls="navbarNav"
-                    aria-expanded="false"
+                    aria-expanded={isMenuOpen} 
                     aria-label="Toggle navigation"
                 >
-                    <span className="navbar-toggler-icon" style={{ filter: 'invert(1)' }}></span>
+                    {/* Icona che cambia: X se aperto, Hamburger se chiuso */}
+                    {isMenuOpen ? (
+                        <X size={24} color="white" /> 
+                    ) : (
+                        <span className="navbar-toggler-icon" style={{ filter: 'invert(1)' }}></span>
+                    )}
                 </button>
 
-                {/* Menu */}
-                <div className="collapse navbar-collapse" id="navbarNav">
+                {/* Menu a Tendina */}
+                <div 
+                    className={`collapse navbar-collapse ${isMenuOpen ? 'show' : ''}`}
+                    id="navbarNav"
+                >
+                    {/* Link Principali (Home, Film, Serie TV) */}
                     <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                         <li className="nav-item">
-                            <NavLink to="/" end className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>Home</NavLink>
+                            <NavLink 
+                                to="/" 
+                                end 
+                                className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
+                                onClick={() => setIsMenuOpen(false)} 
+                            >
+                                Home
+                            </NavLink>
                         </li>
                         <li className="nav-item">
-                            <NavLink to="/movies" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>Film</NavLink>
+                            <NavLink 
+                                to="/movies" 
+                                className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
+                                onClick={() => setIsMenuOpen(false)}
+                            >
+                                Film
+                            </NavLink>
                         </li>
                         <li className="nav-item">
-                            <NavLink to="/tvshows" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>Serie TV</NavLink>
+                            <NavLink 
+                                to="/tvshows" 
+                                className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
+                                onClick={() => setIsMenuOpen(false)}
+                            >
+                                Serie TV
+                            </NavLink>
                         </li>
                     </ul>
 
-                    {/* Icone a destra */}
-                    <ul className="navbar-nav ms-auto d-flex align-items-center gap-3">
+                    {/* Icone a destra - ORA APPAIONO SOTTO I LINK SU MOBILE */}
+                    <ul 
+                        className="navbar-nav d-flex align-items-center gap-3 mobile-icon-list"
+                    >
                         
-                        {/* -------------------- RICERCA MODIFICATA -------------------- */}
+                        {/* -------------------- RICERCA (LOGICA UNIFICATA) -------------------- */}
                         <li className="nav-item search-container">
-                            {/* Icona Lente fissa */}
-                            <span className="nav-link search-icon" onClick={handleSearchToggle} style={{ cursor: 'pointer' }}>
-                                <Search size={20} color="white" />
-                            </span>
                             
-                            {/* Barra di Ricerca Assoluta (condizionale) */}
-                            {isSearchOpen && (
-                                <form onSubmit={handleSearchSubmit} className="search-form-absolute">
+                            {/* Visualizzazione condizionale: Se la ricerca è aperta, mostra il form; altrimenti, mostra la lente */}
+                            {isSearchOpen ? (
+                                <form onSubmit={handleSearchSubmit} 
+                                    className={`search-form-absolute ${isMenuOpen ? 'mobile-inline-search' : ''}`}
+                                >
                                     <input
                                         type="text"
                                         placeholder="Cerca film o serie TV..."
@@ -103,11 +151,16 @@ export default function NavBar() {
                                         autoFocus
                                         className="search-input-absolute"
                                     />
-                                    {/* Bottone Chiudi */}
+                                    {/* Bottone Chiudi (visibile solo su desktop, nascosto dal CSS su mobile) */}
                                     <button type="button" className="close-search-btn" onClick={handleSearchToggle}>
                                         <X size={24} color="white" />
                                     </button>
                                 </form>
+                            ) : (
+                                // Icona Lente fissa
+                                <span className="nav-link search-icon" onClick={handleSearchToggle} style={{ cursor: 'pointer' }}>
+                                    <Search size={20} color="white" />
+                                </span>
                             )}
                         </li>
                         {/* ----------------------------------------------------------- */}
@@ -124,14 +177,14 @@ export default function NavBar() {
                             </NavLink>
                         </li>
 
-                        {/* Notifiche (Decorativo) */}
+                        {/* Notifiche (Desktop only) */}
                         <li className="nav-item d-none d-lg-block">
                             <span className="nav-link" style={{cursor: 'pointer'}}>
                                 <Bell size={20} color="white" />
                             </span>
                         </li>
 
-                        {/* Profilo (Decorativo) */}
+                        {/* Profilo (Desktop only) */}
                         <li className="nav-item d-none d-lg-block">
                             <span className="nav-link" style={{cursor: 'pointer'}}>
                                 <PersonCircle size={24} color="white" />
