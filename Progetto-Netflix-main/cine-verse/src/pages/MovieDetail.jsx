@@ -23,13 +23,13 @@ export default function MovieDetail() {
         startType = 'tv';
     }
 
-    // 3. STATO INIZIALIZZATO SUBITO
+    // 3. STATO
     const [movie, setMovie] = useState(initialData || null);
     const [cast, setCast] = useState([]);
     const [trailer, setTrailer] = useState(null);
     const [similar, setSimilar] = useState([]);
     
-    // Loading è true SOLO se non abbiamo neanche i dati parziali
+    // Loading è true SOLO se non abbiamo dati parziali
     const [loading, setLoading] = useState(!initialData);
     const [error, setError] = useState(false);
     const [contentType, setContentType] = useState(startType);
@@ -58,30 +58,26 @@ export default function MovieDetail() {
             let currentType = startType;
             let details = null;
 
-            // TENTATIVO 1: Tipo principale
-            details = await fetchFromTmdb(`/${currentType}/${id}`);
+            // TENTATIVO 1
+            details = await fetchFromTmdb(`${currentType}/${id}`);
 
             // FALLBACK: Se è null (404) o ha errore, prova l'altro tipo
             if (!details || details.success === false) {
                 console.warn(`Fallito come ${currentType}, provo switch...`);
                 currentType = currentType === 'movie' ? 'tv' : 'movie';
-                details = await fetchFromTmdb(`/${currentType}/${id}`);
+                details = await fetchFromTmdb(`${currentType}/${id}`);
             }
 
             // CONTROLLO FINALE
             if (details && details.success !== false) {
-                // SUCCESSO! Aggiorniamo con i dati completi
                 setMovie(details);
                 setContentType(currentType);
                 setLoading(false);
 
-                // Carica Extra (Cast, Trailer, ecc.) solo ora
+                // Carica Extra
                 loadExtras(currentType, id);
             } else {
-                // FALLIMENTO TOTALE
-                console.error("Nessun dettaglio trovato.");
-                
-                // PUNTO CRUCIALE: Se abbiamo i dati iniziali, NON mostriamo errore!
+                // SE ABBIAMO I DATI INIZIALI, NON MOSTRIAMO ERRORE!
                 if (!initialData) {
                     setError(true);
                 }
@@ -92,7 +88,7 @@ export default function MovieDetail() {
         const loadExtras = async (type, mediaId) => {
             try {
                 const creditsRes = await fetchFromTmdb(`${type}/${mediaId}/credits`);
-                if (creditsRes) setCast(creditsRes.cast?.slice(0, 9) || []);
+                if (creditsRes) setCast(creditsRes.cast?.slice(0, 10) || []);
 
                 const videosRes = await fetchFromTmdb(`${type}/${mediaId}/videos`);
                 if (videosRes) {
@@ -109,8 +105,6 @@ export default function MovieDetail() {
 
         loadFullDetails();
     }, [id]); 
-
-    // --- RENDER ---
 
     if (loading && !movie) return <div className="detail-loading">Caricamento...</div>;
     
@@ -175,9 +169,9 @@ export default function MovieDetail() {
                                 {renderGenres()}
                             </div>
 
-                            <h4 className="section-heading">Trama del film</h4>
+                            <h4 className="section-heading">Sinossi</h4>
                             <p className="detail-overview">
-                                {movie?.overview || "Nessuna trama disponibile al momento."}
+                                {movie?.overview || "Nessuna trama disponibile."}
                             </p>
 
                             <div className="action-buttons mt-4">

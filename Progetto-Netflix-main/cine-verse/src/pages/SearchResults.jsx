@@ -1,75 +1,68 @@
-// src/pages/SearchResults.jsx
-
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { searchContent } from '../api/tmdb'; // Assicurati del percorso corretto
-import MovieCard from '../components/MovieCard'; // Assumi di avere un componente MovieCard
-import './SearchResults.css'; // Assicurati di creare questo file
+// CORREZIONE: Importiamo fetchFromTmdb correttamente
+import { fetchFromTmdb } from '../api/tmdb.js'; 
+import MovieCard from '../components/MovieCard.jsx';
+import './homeStyle.css'; 
 
 export default function SearchResults() {
-    // Ottiene il valore di 'query' dalla URL (?query=...)
     const [searchParams] = useSearchParams();
-    const query = searchParams.get('query'); 
-    const searchTerm = query ? decodeURIComponent(query) : '';
-
+    const query = searchParams.get('query') || searchParams.get('q'); // Supporta sia ?query= che ?q=
     const [results, setResults] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(false);
 
-    // Effetto per eseguire la ricerca
     useEffect(() => {
-        const fetchResults = async () => {
-            if (!searchTerm) {
-                setResults([]);
-                setLoading(false);
-                return;
-            }
-
-            setLoading(true);
-            setError(null);
-            
-            try {
-                const data = await searchContent(searchTerm);
-                setResults(data);
-            } catch (err) {
-                setError("Impossibile caricare i risultati. Riprova più tardi.");
-                setResults([]);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchResults();
-    }, [searchTerm]); // Si attiva quando la query nella URL cambia
+        if (query) {
+            const search = async () => {
+                setLoading(true);
+                try {
+                    // Usa l'endpoint di ricerca multi (film + serie)
+                    const data = await fetchFromTmdb('/search/multi', { query: query });
+                    
+                    // Filtra: teniamo solo film e serie (rimuoviamo persone)
+                    const filtered = data?.results?.filter(
+                        item => item.media_type === 'movie' || item.media_type === 'tv'
+                    ) || [];
+                    
+                    setResults(filtered);
+                } catch (error) {
+                    console.error("Errore ricerca:", error);
+                } finally {
+                    setLoading(false);
+                }
+            };
+            search();
+        } else {
+            setResults([]);
+        }
+    }, [query]);
 
     return (
-        <div className="search-results-page">
-            
-            <h1 className="search-title">
-                {searchTerm ? `Risultati per: "${searchTerm}"` : 'Inizia la ricerca dalla Navbar...'}
-            </h1>
-            
-            <div className="search-content">
-                {loading && <p className="loading-message">Caricamento risultati...</p>}
+        <div className="container-fluid pt-5" style={{ backgroundColor: "#141414", minHeight: "100vh" }}>
+            <div className="px-3 pt-4">
+                <h2 className="text-white mb-4">
+                    Risultati per: <span className="text-danger fw-bold">"{query}"</span>
+                </h2>
 
-                {error && <p className="error-message">{error}</p>}
-
-                {!loading && !error && results.length === 0 && searchTerm && (
-                    <p className="no-results-message">
-                        Nessun risultato trovato per "{searchTerm}".
-                    </p>
+                {loading ? (
+                    <div className="text-center text-white py-5">
+                        <div className="spinner-border text-danger" role="status"></div>
+                    </div>
+                ) : results.length > 0 ? (
+                    <div className="row g-3">
+                        {results.map(item => (
+                            <div key={item.id} className="col-6 col-sm-4 col-md-3 col-lg-2">
+                                {/* Passiamo 'media' così la card sa che tipo è */}
+                                <MovieCard media={item} />
+                            </div>
+                        ))}
+                    </div>
+                ) : (
+                    <div className="text-center text-white mt-5">
+                        <h3>Nessun risultato trovato 😢</h3>
+                        <p className="text-white-50">Prova a cercare qualcos'altro.</p>
+                    </div>
                 )}
-
-                <div className="results-grid">
-                    {/* Visualizza i risultati */}
-                    {!loading && !error && results.length > 0 && results.map(item => (
-                        <MovieCard 
-                            key={item.id} 
-                            media={item} 
-                            mediaType={item.media_type}
-                        />
-                    ))}
-                </div>
             </div>
         </div>
     );

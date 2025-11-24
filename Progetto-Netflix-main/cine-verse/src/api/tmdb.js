@@ -1,4 +1,4 @@
-const API_KEY = "4e6c24759d6bacacc8b69a032480180c"; // La tua chiave
+const API_KEY = "4e6c24759d6bacacc8b69a032480180c"; 
 const BASE_URL = "https://api.themoviedb.org/3";
 
 export const ENDPOINTS = {
@@ -33,7 +33,7 @@ export const fetchFromTmdb = async (endpoint, params = {}) => {
 
         const response = await fetch(url);
 
-        // Gestione specifica 404: ritorna null invece di lanciare errore
+        // Gestione 404 soft: ritorna null invece di errore (così gestiamo il fallback)
         if (response.status === 404) {
             console.warn(`Risorsa non trovata (404): ${cleanEndpoint}`);
             return null;
