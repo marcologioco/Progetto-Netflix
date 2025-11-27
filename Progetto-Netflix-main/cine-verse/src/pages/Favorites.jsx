@@ -10,7 +10,7 @@ export default function Favorites() {
         <div className="container-fluid pt-5" style={{ backgroundColor: "#141414", minHeight: "100vh", paddingBottom: "3rem" }}>
             
             {/* Titolo e Contatore */}
-            <div className="d-flex align-items-center gap-2 mb-4 px-3">
+            <div className="d-flex align-items-center gap-2 mb-4 px-3 mt-5">
                 <h2 className="text-white fw-bold m-0">La mia Lista</h2>
                 {favorites.length > 0 && (
                     <span className="badge bg-danger" style={{fontSize: '1rem'}}>

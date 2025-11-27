@@ -133,7 +133,7 @@ export default function Home() {
             )}
 
             {/* LISTE FILM */}
-            <div className="movies-sliders-container container-fluid px-4">
+            <div className="movies-sliders-container container-fluid px-8">
                 <FilmSection title="🎬 Popolari su CineVerse" movies={popularMovies} />
                 <FilmSection title="⭐ I più votati dalla critica" movies={topRatedMovies} />
                 <FilmSection title="🔥 In Tendenza ora" movies={trendingMovies} />

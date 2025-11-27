@@ -8,7 +8,7 @@ import './MovieCard.css';
 export default function MovieCard({ media, movie }) {
     const navigate = useNavigate();
 
-    // Unifichiamo i dati: usa 'media' se arriva dalla ricerca, altrimenti 'movie'
+    // Unifichiamo i dati
     const item = media || movie;
 
     if (!item) return null;
@@ -17,6 +17,9 @@ export default function MovieCard({ media, movie }) {
     
     const isFavorite = favorites.some(f => String(f.id) === String(item.id));
     const POSTER_BASE_URL = "https://image.tmdb.org/t/p/w500";
+    
+    // URL per il Placeholder (sfondo scuro, testo grigio)
+    const NO_POSTER_IMG = "https://placehold.co/500x750/222/999?text=No+Poster";
 
     const getRatingColor = (vote) => {
         if (vote >= 7.7) return '#46d369';
@@ -25,7 +28,6 @@ export default function MovieCard({ media, movie }) {
     };
 
     const handleCardClick = () => {
-        // Capisce se è TV o Film
         const isTvShow = item.media_type === 'tv' || item.first_air_date || item.name;
         const targetPath = isTvShow ? `/tv/${item.id}` : `/movie/${item.id}`;
 
@@ -40,10 +42,10 @@ export default function MovieCard({ media, movie }) {
     const title = item.title || item.name;
     const date = item.release_date || item.first_air_date;
 
-    // Fallback per immagine mancante
+    // Determiniamo la sorgente iniziale dell'immagine
     const imageSrc = item.poster_path 
         ? `${POSTER_BASE_URL}${item.poster_path}` 
-        : 'https://via.placeholder.com/500x750?text=No+Poster';
+        : NO_POSTER_IMG;
 
     return (
         <div className="movie-card-modern" onClick={handleCardClick}>
@@ -52,6 +54,8 @@ export default function MovieCard({ media, movie }) {
                     src={imageSrc}
                     alt={title}
                     className="card-poster"
+                    // LA MAGIA: Se l'immagine fallisce, mette il placeholder
+                    onError={(e) => { e.target.src = NO_POSTER_IMG; }} 
                 />
                 <div className="rating-badge" style={{backgroundColor: getRatingColor(item.vote_average)}}>
                     <span className="rating-text">{item.vote_average?.toFixed(1)}</span>

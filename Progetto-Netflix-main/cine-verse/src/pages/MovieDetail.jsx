@@ -29,18 +29,18 @@ export default function MovieDetail() {
     const [trailer, setTrailer] = useState(null);
     const [similar, setSimilar] = useState([]);
     
-    // Loading è true SOLO se non abbiamo dati parziali
     const [loading, setLoading] = useState(!initialData);
     const [error, setError] = useState(false);
     const [contentType, setContentType] = useState(startType);
 
     const { favorites, addFavorite, removeFavorite } = useContext(FavoritesContext);
 
-    const NO_POSTER_IMG = "https://placehold.co/500x750/333/FFF?text=No+Poster";
+    // URL Sicuri per i Placeholder
+    const NO_POSTER_IMG = "https://placehold.co/500x750/333/FFF?text=No+Poster"; // Nuovo placeholder per film
+    const NO_ACTOR_IMG = "https://placehold.co/200x300/333/FFF?text=No+Image+Cast"; // Nuovo placeholder per attori
     const BG_IMAGE = "https://images.unsplash.com/photo-1574267432553-4b4628081c31?auto=format&fit=crop&w=1920&q=80";
 
     useEffect(() => {
-        // Reset parziale solo se cambia ID
         if (id && movie?.id && String(movie.id) !== id) {
              if (location.state?.movie) {
                  setMovie(location.state.movie);
@@ -59,13 +59,13 @@ export default function MovieDetail() {
             let details = null;
 
             // TENTATIVO 1
-            details = await fetchFromTmdb(`${currentType}/${id}`);
+            details = await fetchFromTmdb(`/${currentType}/${id}`);
 
-            // FALLBACK: Se è null (404) o ha errore, prova l'altro tipo
+            // FALLBACK
             if (!details || details.success === false) {
                 console.warn(`Fallito come ${currentType}, provo switch...`);
                 currentType = currentType === 'movie' ? 'tv' : 'movie';
-                details = await fetchFromTmdb(`${currentType}/${id}`);
+                details = await fetchFromTmdb(`/${currentType}/${id}`);
             }
 
             // CONTROLLO FINALE
@@ -74,10 +74,8 @@ export default function MovieDetail() {
                 setContentType(currentType);
                 setLoading(false);
 
-                // Carica Extra
                 loadExtras(currentType, id);
             } else {
-                // SE ABBIAMO I DATI INIZIALI, NON MOSTRIAMO ERRORE!
                 if (!initialData) {
                     setError(true);
                 }
@@ -115,7 +113,6 @@ export default function MovieDetail() {
         </div>
     );
 
-    // Normalizzazione Dati
     const isFavorite = favorites.some(f => String(f.id) === String(movie?.id));
     const title = movie?.title || movie?.name || "Senza Titolo";
     const originalTitle = movie?.original_title || movie?.original_name;
@@ -183,13 +180,14 @@ export default function MovieDetail() {
                                     <span className="btn-label">Lista</span>
                                 </div>
 
-                                
+                               
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div className="secondary-content mt-5 fade-in-up">
+                    {/* SEZIONE CAST CORRETTA */}
                     {cast.length > 0 && (
                         <div className="mb-5">
                             <h3 className="text-white mb-4 border-start border-4 border-danger ps-3">Cast Principale</h3>
@@ -197,8 +195,10 @@ export default function MovieDetail() {
                                 {cast.map(actor => (
                                     <div key={actor.id} className="cast-card">
                                         <img 
-                                            src={actor.profile_path ? `https://image.tmdb.org/t/p/w185${actor.profile_path}` : 'https://via.placeholder.com/150'} 
-                                            alt={actor.name} 
+                                            src={actor.profile_path ? `https://image.tmdb.org/t/p/w185${actor.profile_path}` : NO_ACTOR_IMG} 
+                                            alt={actor.name}
+                                            // Se l'immagine dell'attore fallisce, usa il placeholder
+                                            onError={(e) => { e.target.src = NO_ACTOR_IMG; }}
                                         />
                                         <p className="cast-name">{actor.name}</p>
                                     </div>
