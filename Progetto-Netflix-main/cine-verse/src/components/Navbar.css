@@ -31,14 +31,13 @@
 
 /* STILE LOGO CON CERCHIETTO BIANCO */
 .navbar-logo {
-    height: 45px;        /* Altezza fissa */
-    width: 45px;         /* Larghezza fissa uguale all'altezza per il cerchio */
-    padding: 6px;        /* Spazio tra il logo nero e il bordo bianco */
-    background-color: white; /* Sfondo bianco */
-    border-radius: 50%;  /* Lo rende un cerchio perfetto */
-    object-fit: contain; /* Mantiene le proporzioni del logo interno */
+    height: 45px;        
+    padding: 6px;        
+    background-color: white; 
+    border-radius: 50%;
+    object-fit: contain;
     transition: all 0.3s;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2); /* Leggera ombra */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2); 
 }
 
 /* Quando si scolla, il cerchio si rimpicciolisce leggermente */
@@ -71,14 +70,13 @@
 
 
 .search-container {
-    position: relative; /* Importante per posizionare la barra assoluta */
-    /* Assicurati che non ci sia padding orizzontale su questo nav-item
-       che interferisca con l'animazione della barra. */
+    position: relative; 
+    
 }
 
-/* Stile dell'icona lente fissa (quella che fa aprire) */
+
 .search-icon {
-    /* Manteniamo le icone a destra con un colore chiaro */
+   
     color: white; 
     transition: color 0.2s ease;
 }
@@ -99,8 +97,8 @@
     align-items: center;
     
     /* Design: Elegante e Scuro */
-    background-color: #202020; /* Sfondo scuro per l'intera barra */
-    border: 1px solid #ff4500; /* Bordo sottile colorato (focus) */
+    background-color: #202020; 
+    border: 1px solid #ff4500; 
     border-radius: 8px; /* Angoli leggermente arrotondati */
     padding: 2px 5px;
     width: 250px; 

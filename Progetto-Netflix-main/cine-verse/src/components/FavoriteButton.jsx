@@ -6,19 +6,19 @@ export default function FavoriteButton({ isFavorite, onClick }) {
     const [animate, setAnimate] = useState(false);
 
     const handleClick = (e) => {
-        // 1. Attiva l'animazione
+        //  Attiva l'animazione
         setAnimate(true);
         
-        // 2. Resetta l'animazione dopo 300ms (durata dell'effetto)
+        //  Resetta l'animazione dopo 300ms (durata dell'effetto)
         setTimeout(() => setAnimate(false), 300);
         
-        // 3. Chiama la funzione reale per aggiungere/rimuovere
+        //  Chiama la funzione reale per aggiungere/rimuovere
         if (onClick) onClick(e);
     };
 
     return (
         <button 
-            // Combina le classi: cerchio base + stato attivo + animazione click
+            // cerchio base + stato attivo + animazione click
             className={`favorite-btn-circle ${isFavorite ? 'active' : ''} ${animate ? 'clicked' : ''}`} 
             onClick={handleClick}
             type="button"

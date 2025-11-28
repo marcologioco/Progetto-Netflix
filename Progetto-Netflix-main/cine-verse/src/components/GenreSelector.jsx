@@ -1,5 +1,4 @@
 import React from 'react';
-// Assicurati che questo file CSS esista
 import './GenreSelector.css'; 
 
 export default function GenreSelector({ genres, selectedGenre, onSelect }) {

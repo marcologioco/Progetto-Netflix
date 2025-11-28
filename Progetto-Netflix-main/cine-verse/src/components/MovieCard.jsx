@@ -8,7 +8,7 @@ import './MovieCard.css';
 export default function MovieCard({ media, movie }) {
     const navigate = useNavigate();
 
-    // Unifichiamo i dati
+   
     const item = media || movie;
 
     if (!item) return null;
@@ -54,7 +54,7 @@ export default function MovieCard({ media, movie }) {
                     src={imageSrc}
                     alt={title}
                     className="card-poster"
-                    // LA MAGIA: Se l'immagine fallisce, mette il placeholder
+                    // Se l'immagine fallisce, mette il placeholder
                     onError={(e) => { e.target.src = NO_POSTER_IMG; }} 
                 />
                 <div className="rating-badge" style={{backgroundColor: getRatingColor(item.vote_average)}}>

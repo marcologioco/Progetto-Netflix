@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { fetchFromTmdb, ENDPOINTS } from '../api/tmdb';
 import MovieCard from '../components/MovieCard';
-import GenreSelector from '../components/GenreSelector'; // <--- IMPORT NUOVO
+import GenreSelector from '../components/GenreSelector'; 
 import './homeStyle.css'; 
 
 // CONFIGURAZIONE GENERI SERIE TV (Immagini Aggiornate)
@@ -9,32 +9,32 @@ const GENRES_UI = [
     { 
         id: 10759, 
         name: 'Action & Adv', 
-        img: 'https://image.tmdb.org/t/p/original/uDgy6hyPd82kOHh6I95FLtLnj6p.jpg' // The Last of Us
+        img: 'https://image.tmdb.org/t/p/original/uDgy6hyPd82kOHh6I95FLtLnj6p.jpg' 
     },
     { 
         id: 10765, 
         name: 'Sci-Fi & Fant', 
-        img: 'https://image.tmdb.org/t/p/original/jBJWaqoSCiARWtfV0GlqHrcdidd.jpg' // The Witcher
+        img: 'https://image.tmdb.org/t/p/original/jBJWaqoSCiARWtfV0GlqHrcdidd.jpg' 
     },
     { 
         id: 35, 
         name: 'Sitcoms', 
-        img: 'https://image.tmdb.org/t/p/original/qWnJzyZhyy74gjpSjIXWmuk0ifX.jpg' // The Office
+        img: 'https://image.tmdb.org/t/p/original/qWnJzyZhyy74gjpSjIXWmuk0ifX.jpg' 
     },
     { 
         id: 80, 
         name: 'Crime', 
-        img: 'https://image.tmdb.org/t/p/original/rSPw7tgCH9c6NqICZef4kZjFOQ5.jpg' // Narcos
+        img: 'https://image.tmdb.org/t/p/original/rSPw7tgCH9c6NqICZef4kZjFOQ5.jpg' 
     },
     { 
         id: 18, 
         name: 'Drama', 
-        img: 'https://image.tmdb.org/t/p/original/oaGvjB0DvdhXhOAuADfHb261ZHa.jpg' // Squid Game
+        img: 'https://image.tmdb.org/t/p/original/oaGvjB0DvdhXhOAuADfHb261ZHa.jpg' 
     },
     { 
         id: 16, 
         name: 'Animazione', 
-        img: 'https://image.tmdb.org/t/p/original/6UH52Fmau8RPsMAbQbjwN3wJSCj.jpg' // Invincible
+        img: 'https://image.tmdb.org/t/p/original/6UH52Fmau8RPsMAbQbjwN3wJSCj.jpg' 
     },
 ];
 

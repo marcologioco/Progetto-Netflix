@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { fetchFromTmdb, ENDPOINTS } from '../api/tmdb'; 
 import MovieCard from '../components/MovieCard';
-import GenreSelector from '../components/GenreSelector'; // Assicurati di aver creato questo componente
+import GenreSelector from '../components/GenreSelector'; 
 import './homeStyle.css'; 
 
 // CONFIGURAZIONE GENERI FILM (Con immagini funzionanti)
@@ -9,8 +9,8 @@ const GENRES_UI = [
     { id: 28, name: 'Azione', img: 'https://image.tmdb.org/t/p/w1280/hZkgoQYus5vegHoetLkCJzb17zJ.jpg' },
     { id: 878, name: 'Sci-Fi', img: 'https://image.tmdb.org/t/p/w1280/lzWHmYdfeFiMIY4JaMmtR7GEli3.jpg' },
     { id: 35, name: 'Commedia', img: 'https://image.tmdb.org/t/p/w1280/ctMserH8g2SeOAnCw5gFjdQF8mo.jpg' },
-    { id: 27, name: 'Horror', img: 'https://image.tmdb.org/t/p/w1280/53z2fXEKfnNg2uSOPss2unPBGX1.jpg' }, // The Nun II
-    { id: 10749, name: 'Romantico', img: 'https://image.tmdb.org/t/p/w1280/6VmFqApQRyZZzmiGOQq2C92jyvH.jpg' }, // Titanic
+    { id: 27, name: 'Horror', img: 'https://image.tmdb.org/t/p/w1280/53z2fXEKfnNg2uSOPss2unPBGX1.jpg' }, 
+    { id: 10749, name: 'Romantico', img: 'https://image.tmdb.org/t/p/w1280/6VmFqApQRyZZzmiGOQq2C92jyvH.jpg' }, 
     { id: 16, name: 'Animazione', img: 'https://image.tmdb.org/t/p/w1280/4HodYYKEIsGOdinkGi2Ucz6X9i0.jpg' },
 ];
 

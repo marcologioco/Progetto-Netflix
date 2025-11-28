@@ -22,7 +22,7 @@ export const TV_GENRE_IDS = {
 
 export const fetchFromTmdb = async (endpoint, params = {}) => {
     try {
-        // Rimuovi eventuale slash iniziale per evitare doppi slash
+        
         const cleanEndpoint = endpoint.startsWith('/') ? endpoint.slice(1) : endpoint;
         
         const url = new URL(`${BASE_URL}/${cleanEndpoint}`);
@@ -33,7 +33,7 @@ export const fetchFromTmdb = async (endpoint, params = {}) => {
 
         const response = await fetch(url);
 
-        // Gestione 404 soft: ritorna null invece di errore (così gestiamo il fallback)
+        
         if (response.status === 404) {
             console.warn(`Risorsa non trovata (404): ${cleanEndpoint}`);
             return null;

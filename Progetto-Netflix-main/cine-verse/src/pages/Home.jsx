@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { useNavigate } from 'react-router-dom'; // 1. Importiamo l'hook per navigare
+import { useNavigate } from 'react-router-dom'; 
 import { fetchFromTmdb, ENDPOINTS } from '../api/tmdb.js';
 import MovieCard from '../components/MovieCard.jsx';
 import { FavoritesContext } from '../context/FavoritesContext.jsx';
-import './homeStyle.css'; // Assicurati che il nome del file coincida (minuscolo/maiuscolo)
-import logoImage from '../assets/logo.png';
+import './homeStyle.css'; 
+import logoImage from '../assets/logo.png'; 
 
 export default function Home() {
-    const navigate = useNavigate(); // 2. Inizializziamo l'hook
+    const navigate = useNavigate(); 
     
     const [popularMovies, setPopularMovies] = useState([]);
     const [topRatedMovies, setTopRatedMovies] = useState([]);
@@ -51,8 +51,7 @@ export default function Home() {
     const handleHeroInfo = () => {
         if (!heroMovie) return;
         
-        // Navighiamo alla pagina dettaglio passando i dati nello state
-        // La Hero carica film popolari, quindi èTvShow = false
+        
         navigate(`/movie/${heroMovie.id}`, { 
             state: { 
                 movie: heroMovie, 

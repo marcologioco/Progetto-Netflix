@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-// CORREZIONE: Importiamo fetchFromTmdb correttamente
 import { fetchFromTmdb } from '../api/tmdb.js'; 
 import MovieCard from '../components/MovieCard.jsx';
 import './homeStyle.css'; 
 
 export default function SearchResults() {
     const [searchParams] = useSearchParams();
-    const query = searchParams.get('query') || searchParams.get('q'); // Supporta sia ?query= che ?q=
+    const query = searchParams.get('query') || searchParams.get('q'); 
     const [results, setResults] = useState([]);
     const [loading, setLoading] = useState(false);
 

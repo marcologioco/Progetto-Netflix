@@ -36,15 +36,14 @@ export default function NavBar() {
         setIsSearchOpen(!isSearchOpen);
         // Chiude il menu mobile se si apre la ricerca su desktop (non rilevante qui, ma buona prassi)
         if (isMenuOpen && !isSearchOpen) {
-            // Se apri la ricerca in modalità mobile, il menu rimane aperto e la lente scompare
-            // ma se chiudi la ricerca, non chiudere il menu.
+           
         }
     };
 
     // Funzione: Toggle del menu mobile
     const handleMenuToggle = () => {
         setIsMenuOpen(!isMenuOpen);
-        // Chiude la barra di ricerca quando si apre il menu mobile
+        
         if (isSearchOpen) { 
             setIsSearchOpen(false); 
         }
