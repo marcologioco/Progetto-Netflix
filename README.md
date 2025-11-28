@@ -47,6 +47,7 @@ dettagliate.
 -   **React Context API**
 -   **CSS3**, Flexbox, Grid, Animazioni
 -   **SVG nativi**
+-   **boostrap 5**
 
 ## 📂 Struttura del Progetto
 
@@ -77,15 +78,10 @@ dettagliate.
 -   Logica difensiva in `MovieDetail.jsx` per evitare errori 404
     caricando prima come film, poi come serie.
 
-### 2. Navigazione Ottimizzata (State Passing)
+### 2. Navigazione Ottimizzata 
 
 -   Passaggio dell'intero oggetto `movie` alla pagina dettaglio per
     render istantaneo.
-
-### 3. Context API vs Redux
-
--   Scelta del Context per evitare overkill di Redux per uno stato
-    semplice.
 
 ## 🚀 Installazione
 
@@ -98,5 +94,6 @@ npm run dev
 
 ## 👤 Autori
 
-Sviluppato per il corso di React.
+Marco Lo Gioco 
+Mattia Fiore 
 
