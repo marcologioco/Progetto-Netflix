@@ -177,19 +177,7 @@ export default function NavBar() {
                             </NavLink>
                         </li>
 
-                        {/* Notifiche (Desktop only) */}
-                        <li className="nav-item d-none d-lg-block">
-                            <span className="nav-link" style={{cursor: 'pointer'}}>
-                                <Bell size={20} color="white" />
-                            </span>
-                        </li>
-
-                        {/* Profilo (Desktop only) */}
-                        <li className="nav-item d-none d-lg-block">
-                            <span className="nav-link" style={{cursor: 'pointer'}}>
-                                <PersonCircle size={24} color="white" />
-                            </span>
-                        </li>
+                      
                     </ul>
                 </div>
             </div>

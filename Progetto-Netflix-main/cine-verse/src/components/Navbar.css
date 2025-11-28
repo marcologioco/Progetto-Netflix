@@ -19,6 +19,16 @@
     padding-bottom: 0.5rem !important;
 }
 
+/* Su mobile, il navbar scrolled rimane trasparente */
+@media (max-width: 991.98px) {
+    .navbar-scrolled {
+        background: linear-gradient(to bottom, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0) 100%);
+        box-shadow: none;
+        padding-top: 1rem !important;
+        padding-bottom: 1rem !important;
+    }
+}
+
 /* STILE LOGO CON CERCHIETTO BIANCO */
 .navbar-logo {
     height: 45px;        /* Altezza fissa */

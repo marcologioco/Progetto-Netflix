@@ -166,7 +166,7 @@ export default function MovieDetail() {
                                 {renderGenres()}
                             </div>
 
-                            <h4 className="section-heading">Sinossi</h4>
+                            <h4 className="section-heading">Trama</h4>
                             <p className="detail-overview">
                                 {movie?.overview || "Nessuna trama disponibile."}
                             </p>
