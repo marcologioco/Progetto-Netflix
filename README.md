@@ -49,6 +49,14 @@ dettagliate.
 -   **SVG nativi**
 -   **boostrap 5**
 
+
+## 📦 Librerie Esterne Utilizzate
+- react-router-dom:  Fondamentale per creare una SPA (Single Page Application). Gestisce la navigazione tra le pagine (Home, Dettaglio, Ricerca) senza ricaricare il browser e permette il passaggio di parametri (ID film) e stato (dati parziali) tra le rotte.
+- bootstrap: Utilizzato principalmente per la sua griglia responsive (container, row, col) che garantisce una visualizzazione perfetta su tutti i dispositivi (mobile, tablet, desktop) riducendo il tempo di sviluppo CSS.
+- (Nativa) Context API:  Non è una libreria esterna ma una feature di React. Abbiamo scelto di usarla al posto di Redux perché, per gestire solo la lista dei "Preferiti", offre una soluzione più leggera e meno complessa.
+- (Nativa) Fetch API: Abbiamo utilizzato la fetch nativa di JavaScript (incapsulata in un servizio tmdb.js) invece di Axios per mantenere il bundle del progetto leggero, dato che non erano necessarie funzionalità avanzate di Axios.
+
+
 ## 📂 Struttura del Progetto
 
     src/
